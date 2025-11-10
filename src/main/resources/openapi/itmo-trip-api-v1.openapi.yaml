@@ -1,0 +1,49 @@
+openapi: 3.0.3
+
+info:
+  title: Itmo Trip API
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080/api/v1
+
+tags:
+  - name: test
+    description: test
+
+paths:
+  /test:
+    get:
+      tags:
+        - test
+      operationId: getTest
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestResponse"
+
+components:
+  schemas:
+    TestResponse:
+      description: test response
+      type: object
+      required:
+        - fieldOne
+        - fieldTwo
+        - fieldThree
+        - fieldFour
+      properties:
+        fieldOne:
+          type: integer
+          format: int32
+        fieldTwo:
+          type: boolean
+        fieldThree:
+          type: string
+        fieldFour:
+          type: array
+          items:
+            type: string

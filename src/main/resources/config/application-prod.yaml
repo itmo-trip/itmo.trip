@@ -1,0 +1,4 @@
+management:
+  metrics:
+    tags:
+      env: prod

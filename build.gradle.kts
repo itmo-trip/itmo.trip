@@ -61,6 +61,11 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+
+    val testcontainersVersion = "2.0.1"
+    testImplementation("org.testcontainers:testcontainers-postgresql:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter:$testcontainersVersion")
 }
 
 kotlin {
@@ -79,7 +84,7 @@ val generateApi = tasks.register<GenerateTask>("generateApi", fun GenerateTask.(
     description = "Generated itmo trip api"
 
     generatorName.set("kotlin-spring")
-    inputSpec.set("$rootDir/src/main/resources/openapi/itmo-trip-api-v1.openapi.yaml")
+    inputSpec.set("$rootDir/openapi/itmo-trip-api-v1.openapi.yaml")
     outputDir.set("$buildDir/generated")
     packageName.set("ru.itmo.dws.itmo.trip.generated")
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
@@ -108,7 +113,7 @@ val generateFront = tasks.register<GenerateTask>("generateFront", fun GenerateTa
     description = "Generated itmo trip frontend api"
 
     generatorName.set("typescript-fetch")
-    inputSpec.set("$rootDir/src/main/resources/openapi/itmo-trip-api-v1.openapi.yaml")
+    inputSpec.set("$rootDir/openapi/itmo-trip-api-v1.openapi.yaml")
     outputDir.set("$rootDir/frontend/src/generated/openapi")
     ignoreFileOverride.set("$rootDir/frontend/.openapi-generator-ignore")
     templateDir.set("$rootDir/frontend/mustache-templates")

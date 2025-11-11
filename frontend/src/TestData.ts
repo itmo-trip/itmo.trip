@@ -59,7 +59,7 @@ export const trips: ITrip[] = [
         departure_coords: [59.92768158712746,30.36048332235471],
         arrival_coords: [59.95718670847085,30.308284464092527],
         arrival_time: new Date('2025-11-25T15:30:00Z'),
-        transport_type: 'Общественный',
+        transport_type: 'Общественный транспорт',
         trip_frequency: 'Каждую неделю',
         comment: 'Быстрее всего на метро, согласны?'
     },
@@ -77,7 +77,7 @@ export const trips: ITrip[] = [
         departure_coords: [59.92768158712746,30.36048332235471],
         arrival_coords: [59.95718670847085,30.308284464092527],
         arrival_time: new Date('2025-11-20T15:30:00Z'),
-        transport_type: 'Общественный',
+        transport_type: 'Общественный транспорт',
         trip_frequency: 'Каждую неделю',
         comment: 'Люблю автобусы'
     },
@@ -86,7 +86,7 @@ export const trips: ITrip[] = [
         departure_coords: [59.92768158712746,30.36048332235471],
         arrival_coords: [59.95718670847085,30.308284464092527],
         arrival_time: new Date('2025-11-20T20:30:00Z'),
-        transport_type: 'Машина',
+        transport_type: 'Своя машина',
         trip_frequency: 'Каждую неделю',
         comment: 'Готов подвезти'
     },
@@ -95,7 +95,7 @@ export const trips: ITrip[] = [
         departure_coords: [59.92768158712746,30.36048332235471],
         arrival_coords: [59.95718670847085,30.308284464092527],
         arrival_time: new Date('2025-11-20T12:00:00Z'),
-        transport_type: 'Общественный',
+        transport_type: 'Общественный транспорт',
         trip_frequency: 'Каждую неделю',
         comment: ''
     },

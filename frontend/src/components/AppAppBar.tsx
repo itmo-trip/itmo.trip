@@ -47,7 +47,7 @@ export default function AppAppBar() {
                         <Sitemark />
                         <Box>
                             <Button variant="text" color="info" size="small">
-                                Свои объявления
+                                Мои объявления
                             </Button>
                         </Box>
                     </Box>

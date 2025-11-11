@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./css/SuccessLoginToast.css";
 
 interface Props {
@@ -7,15 +7,28 @@ interface Props {
     onClose: () => void;
 }
 
-export function SuccessLoginToast({ message, duration = 3000, onClose }: Props) {
+export function SuccessLoginToast({ message, duration = 1500, onClose }: Props) {
+    const [visible, setVisible] = useState(false);
+
     useEffect(() => {
-        const timer = setTimeout(onClose, duration);
-        return () => clearTimeout(timer);
+        setVisible(true);
+        const hideTimer = setTimeout(() => setVisible(false), duration);
+
+        const removeTimer = setTimeout(onClose, duration + 500);
+
+        return () => {
+            clearTimeout(hideTimer);
+            clearTimeout(removeTimer);
+        };
     }, [duration, onClose]);
 
     return (
         <div className="toast-wrapper">
-            <div className="success-login-toast">{message}</div>
+            {(message || visible) && (
+                <div className={`success-login-toast ${visible ? "show" : "hide"}`}>
+                    {message}
+                </div>
+            )}
         </div>
     );
 }

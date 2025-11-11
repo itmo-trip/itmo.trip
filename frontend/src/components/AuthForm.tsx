@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { useTheme } from "@mui/material/styles";
-import { Card, TextField, Button, Typography, Box } from "@mui/material";
+import {
+    Card,
+    TextField,
+    Button,
+    Typography,
+    Box
+} from "@mui/material";
+import {login} from "../api/authApi.ts";
 
 interface AuthFormProps {
     onSuccess: () => void;
@@ -9,19 +15,18 @@ interface AuthFormProps {
 export function AuthForm({ onSuccess }: AuthFormProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (username === "admin" && password === "1234") {
+        if (await login(username, password)) {
             onSuccess();
+            setError(false);
         } else {
-            setError("Неверные данные");
+            setError(true);
         }
     };
-
-    const theme = useTheme();
 
     return (
         <Box
@@ -31,7 +36,7 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
                 left: 0,
                 width: "100vw",
                 height: "100vh",
-                bgcolor: "rgba(0, 0, 0, 0.5)",
+                bgcolor: "rgba(0,0,0,0.5)",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -43,15 +48,14 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
                 onSubmit={handleSubmit}
                 sx={{
                     p: 4,
-                    width: 320,
+                    width: 500,
                     display: "flex",
                     flexDirection: "column",
                     gap: 2,
-                    bgcolor: theme.palette.background.paper, // фон Card под тему
-                    color: theme.palette.text.primary,       // текст под тему
+                    borderRadius: 4,
                 }}
             >
-                <Typography variant="h5" align="center" color="text.primary">
+                <Typography variant="h5" align="center">
                     Авторизация
                 </Typography>
 
@@ -61,7 +65,14 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
                     fullWidth
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    error={error}
                 />
+
+                {error && (
+                    <Typography variant="body2" color="error" align="left">
+                        Неверное имя пользователя или пароль
+                    </Typography>
+                )}
 
                 <TextField
                     label="Пароль"
@@ -70,19 +81,16 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
                     fullWidth
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    error={error}
                 />
 
-                {error && (
-                    <Typography variant="body2" color="error" align="center">
-                        {error}
-                    </Typography>
-                )}
-
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" variant="contained" color="primary"
+                sx={{
+                    backgroundColor: "#333",
+                }}>
                     Войти
                 </Button>
             </Card>
-
         </Box>
     );
 }

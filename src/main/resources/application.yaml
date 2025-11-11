@@ -3,6 +3,11 @@ spring:
     name: itmo-trip
   profiles:
     active: dev, local
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://id.itmo.ru/auth/realms/itmo
   datasource:
     driver-class-name: org.postgresql.Driver
   liquibase:

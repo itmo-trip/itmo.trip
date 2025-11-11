@@ -3,6 +3,9 @@ import AppTheme from './theme/AppTheme';
 import TripsTape from './components/TripsTape.tsx';
 import {Container, CssBaseline} from "@mui/material";
 import AppAppBar from "./components/AppAppBar.tsx";
+import {useState} from "react";
+import {AuthForm} from "./components/AuthForm.tsx";
+import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
 
 
 function App() {
@@ -15,29 +18,29 @@ function App() {
     };
 
     return (
-        {!isAuthenticated && <AuthForm onSuccess={handleLoginSuccess} />}
+        <>
+            {!isAuthenticated && <AuthForm onSuccess={handleLoginSuccess} />}
 
-        {toastMessage && (
-            <SuccessLoginToast message={toastMessage} onClose={() => setToastMessage("")} />
-        )}
+            {toastMessage && (
+                <SuccessLoginToast message={toastMessage} onClose={() => setToastMessage("")} />
+            )}
 
-        <AppTheme>
-            <CssBaseline enableColorScheme/>
-            <AppAppBar/>
-            <Container
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    my: 10,
-                    gap: 4,
-                }}
-            >
-                <TripsTape/>
-                {/* заглушка для форматирования, когда мало объявлений
-                    <Latest/>
-                */}
-            </Container>
-        </AppTheme>
+            <AppTheme>
+                <CssBaseline enableColorScheme/>
+                <AppAppBar/>
+                <Container
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        my: 10,
+                        gap: 4,
+                    }}
+                >
+                    <TripsTape/>
+                    {/* заглушка для форматирования, когда мало объявлений <Latest/>*/}
+                </Container>
+            </AppTheme>
+        </>
     )
 }
 

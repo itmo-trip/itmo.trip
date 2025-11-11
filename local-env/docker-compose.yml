@@ -43,5 +43,17 @@ services:
         condition: service_healthy
     restart: on-failure
 
+  frontend:
+    build:
+      context: .././frontend
+      dockerfile: Dockerfile
+    container_name: itmo-trip-frontend
+    ports:
+      - "5177:5177"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: on-failure
+
 volumes:
   postgres_data:

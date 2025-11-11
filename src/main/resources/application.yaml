@@ -1,3 +1,54 @@
 spring:
   application:
     name: itmo-trip
+  profiles:
+    active: dev, local
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://id.itmo.ru/auth/realms/itmo
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+server:
+  port: 8080
+  servlet:
+    context-path: /${spring.application.name}
+  shutdown: graceful
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          additional-path: server:/readyz
+          include: readinessState
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      env: qa
+
+logging:
+  level:
+    root: INFO

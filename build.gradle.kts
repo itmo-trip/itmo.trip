@@ -40,7 +40,7 @@ sourceSets {
 }
 
 application {
-    mainClass.set("ru.itmo.dws.itmotrip.ItmoTripApplication")
+    mainClass.set("ru.itmo.dws.itmotrip.ItmoTripApplicationKt")
 }
 
 repositories {
@@ -50,19 +50,28 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     runtimeOnly("org.postgresql:postgresql")
+    implementation("org.liquibase:liquibase-core")
 }
 
 dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+
+    val testcontainersVersion = "2.0.1"
+    testImplementation("org.testcontainers:testcontainers-postgresql:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter:$testcontainersVersion")
 }
 
 kotlin {
+    jvmToolchain(21)
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
@@ -77,7 +86,7 @@ val generateApi = tasks.register<GenerateTask>("generateApi", fun GenerateTask.(
     description = "Generated itmo trip api"
 
     generatorName.set("kotlin-spring")
-    inputSpec.set("$rootDir/src/main/resources/openapi/itmo-trip-api-v1.openapi.yaml")
+    inputSpec.set("$rootDir/openapi/itmo-trip-api-v1.openapi.yaml")
     outputDir.set("$buildDir/generated")
     packageName.set("ru.itmo.dws.itmo.trip.generated")
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
@@ -106,7 +115,7 @@ val generateFront = tasks.register<GenerateTask>("generateFront", fun GenerateTa
     description = "Generated itmo trip frontend api"
 
     generatorName.set("typescript-fetch")
-    inputSpec.set("$rootDir/src/main/resources/openapi/itmo-trip-api-v1.openapi.yaml")
+    inputSpec.set("$rootDir/openapi/itmo-trip-api-v1.openapi.yaml")
     outputDir.set("$rootDir/frontend/src/generated/openapi")
     ignoreFileOverride.set("$rootDir/frontend/.openapi-generator-ignore")
     templateDir.set("$rootDir/frontend/mustache-templates")

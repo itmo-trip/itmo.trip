@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
+
+    <changeSet id="init-create-users-table" author="quicklybly">
+        <createTable tableName="users">
+            <column name="id" type="uuid" defaultValueComputed="uuidv7()">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="student_id" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="faculty" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="social_network_username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="avatar_url" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="bio" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="users_student_id_idx" tableName="users" unique="true">
+            <column name="student_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="init-create-transport-types-table" author="quicklybly">
+        <createTable tableName="transport_types">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name_ru" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="logo_url" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <loadData
+                tableName="transport_types"
+                file="transport_types.csv"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="init-create-timetable-table" author="quicklybly">
+        <createTable tableName="timetable">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="start_time_utc" type="time without time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time_utc" type="time without time zone">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <loadData
+                tableName="timetable"
+                file="timetable.csv"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="init-create-location-types-table" author="quicklybly">
+        <createTable tableName="location_types">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <!-- Потом можем добавить jsonb с динамическими полями -->
+            <column name="code" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <loadData
+                tableName="location_types"
+                file="location_types.csv"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="init-create-locations-table" author="quicklybly">
+        <createTable tableName="locations">
+            <column name="id" type="uuid" defaultValueComputed="uuidv7()">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="creator_id" type="uuid">
+                <constraints nullable="true"/>
+            </column>
+            <column name="location_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Координаты для будущей миграции на PostGIS -->
+            <column name="latitude" type="decimal(10,8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="decimal(11,8)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint
+                tableName="locations"
+                columnNames="name,creator_id"
+                constraintName="locations_name_creator_id_uq"
+        />
+
+        <addForeignKeyConstraint
+                baseTableName="locations"
+                baseColumnNames="location_type_id"
+                constraintName="locations_location_types_fk"
+                referencedTableName="location_types"
+                referencedColumnNames="id"
+                onDelete="RESTRICT"
+                onUpdate="NO ACTION"/>
+
+        <addForeignKeyConstraint
+                baseTableName="locations"
+                baseColumnNames="creator_id"
+                constraintName="locations_users_fk"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                onUpdate="NO ACTION"/>
+
+        <createIndex indexName="locations_name_idx" tableName="locations">
+            <column name="name"/>
+        </createIndex>
+
+        <createIndex tableName="locations" indexName="locations_creator_id_idx">
+            <column name="creator_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="init-populate-locations-table" author="quicklybly">
+        <sql>
+            insert into locations (creator_id, location_type_id, name, latitude, longitude) values
+            (
+            null,
+            (select id from location_types where code = 'UNIVERSITY_CAMPUS'),
+            'Кронверский',
+            59.95710021974228,
+            30.30825110096854
+            ),
+            (
+            null,
+            (select id from location_types where code = 'UNIVERSITY_CAMPUS'),
+            'Ломоносова',
+            59.92746564931244,
+            30.337998211872815
+            );
+        </sql>
+        <rollback>
+            delete from locations where name in ('Кронверский', 'Ломоносова');
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init-create-trip-status-enum" author="quicklybly">
+        <!-- draft - заполняется (пока не будем использовать), active - актуальный, full - нет мест в карше -->
+        <!-- cancelled - отменена создателем, finished - завершенные поездки, будет проставлятся шедулером и отсекаться индексом -->
+        <sql>
+            create type trip_status as enum ('DRAFT', 'ACTIVE', 'FULL', 'CANCELLED', 'FINISHED');
+        </sql>
+        <rollback>
+            drop type trip_status;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init-create-trips-table" author="quicklybly">
+        <createTable tableName="trips">
+            <column name="id" type="uuid" defaultValueComputed="uuidv7()">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="creator_id" type="uuid">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="series_id" type="uuid">
+                <constraints unique="false" nullable="true"/>
+            </column>
+            <column name="transport_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="departure_time" type="timestamp without time zone">
+                <constraints nullable="true"/>
+            </column>
+            <column name="arrival_time" type="timestamp without time zone">
+                <constraints nullable="true"/>
+            </column>
+            <column name="departure_location_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="arrival_location_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="trip_status" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="trips"
+                baseColumnNames="creator_id"
+                constraintName="trips_users_fk"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                onUpdate="NO ACTION"/>
+
+        <addForeignKeyConstraint
+                baseTableName="trips"
+                baseColumnNames="transport_type_id"
+                constraintName="trips_transport_types_fk"
+                referencedTableName="transport_types"
+                referencedColumnNames="id"
+                onDelete="RESTRICT"
+                onUpdate="NO ACTION"/>
+
+        <addForeignKeyConstraint
+                baseTableName="trips"
+                baseColumnNames="departure_location_id"
+                constraintName="trips_departure_location_fk"
+                referencedTableName="locations"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                onUpdate="NO ACTION"/>
+
+        <addForeignKeyConstraint
+                baseTableName="trips"
+                baseColumnNames="arrival_location_id"
+                constraintName="trips_arrival_location_fk"
+                referencedTableName="locations"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                onUpdate="NO ACTION"/>
+
+        <createIndex indexName="trips_creator_id_idx" tableName="trips">
+            <column name="creator_id"/>
+        </createIndex>
+
+        <createIndex indexName="trips_departure_time_idx" tableName="trips">
+            <column name="departure_time"/>
+        </createIndex>
+
+        <createIndex indexName="trips_arrival_time_idx" tableName="trips">
+            <column name="arrival_time"/>
+        </createIndex>
+
+        <createIndex indexName="trips_departure_location_id_idx" tableName="trips">
+            <column name="departure_location_id"/>
+        </createIndex>
+
+        <createIndex indexName="trips_arrival_location_id_idx" tableName="trips">
+            <column name="arrival_location_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="init-create-trips-series-id-partial-idx" author="quicklybly">
+        <sql>create index trips_series_id_idx on trips (series_id) where series_id is not null</sql>
+        <rollback>drop index trips_series_id_idx</rollback>
+    </changeSet>
+
+    <changeSet id="init-create-trips-status-partial-idx" author="quicklybly">
+        <sql>create index trips_status_idx on trips (status) where status != 'FINISHED'</sql>
+        <rollback>drop index trips_status_idx</rollback>
+    </changeSet>
+</databaseChangeLog>

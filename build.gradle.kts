@@ -40,7 +40,7 @@ sourceSets {
 }
 
 application {
-    mainClass.set("ru.itmo.dws.itmotrip.ItmoTripApplication")
+    mainClass.set("ru.itmo.dws.itmotrip.ItmoTripApplicationKt")
 }
 
 repositories {

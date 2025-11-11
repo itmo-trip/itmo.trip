@@ -19,6 +19,7 @@ class SecurityConfiguration {
         http
             .authorizeHttpRequests {
                 it.requestMatchers("/readyz").permitAll()
+                it.requestMatchers("/auth").permitAll()
 
                 it.anyRequest().authenticated()
             }

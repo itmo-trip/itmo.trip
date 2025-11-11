@@ -1,49 +1,712 @@
-openapi: 3.0.3
+openapi: 3.1.0
 
 info:
-  title: Itmo Trip API
-  version: 0.0.1
+  title: ITMO.Trip
+  version: 1.0.0
+  description: ITMO.Trip Backend REST API
 
 servers:
   - url: http://localhost:8080/api/v1
 
-tags:
-  - name: test
-    description: test
+security:
+  - itmo_id_auth: []
+
+components:
+  securitySchemes:
+    itmo_id_auth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://id.itmo.ru/oauth/authorize
+          tokenUrl: https://id.itmo.ru/oauth/token
+          scopes: {}
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        avatar_url: { type: string, nullable: true }
+        bio: { type: string, nullable: true }
+        faculty: { type: string }
+        first_name: { type: string }
+        last_name: { type: string }
+        middle_name: { type: string, nullable: true }
+        social_network_username: { type: string }
+        student_id: { type: string }
+
+    LocationType:
+      type: object
+      properties:
+        id: { type: number, format: int64 }
+        code: { type: string }
+
+    TransportType:
+      type: object
+      properties:
+        id: { type: number, format: int64 }
+        logo_url: { type: string, nullable: true }
+        name_ru: { type: string }
+
+    Timetable:
+      type: object
+      properties:
+        id: { type: number, format: int64 }
+        end_time_utc: { type: string, format: time }
+        start_time_utc: { type: string, format: time }
+
+    LocationRequest:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        creator_id: { type: string, format: uuid, nullable: true }
+        latitude: { type: number, format: double }
+        location_type_id: { type: number, format: int64 }
+        longitude: { type: number, format: double }
+        name: { type: string }
+
+    LocationResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        creator:
+          $ref: '#/components/schemas/User'
+        latitude: { type: number, format: double }
+        location_type:
+          $ref: '#/components/schemas/LocationType'
+        longitude: { type: number, format: double }
+        name: { type: string }
+
+    TripRequest:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        arrival_location_id: { type: string, format: uuid }
+        arrival_time: { type: string, format: date-time, nullable: true }
+        comment: { type: string, nullable: true }
+        creator_id: { type: string, format: uuid }
+        departure_location_id: { type: string, format: uuid }
+        departure_time: { type: string, format: date-time, nullable: true }
+        series_id: { type: string, format: uuid, nullable: true }
+        status: { type: string }
+        transport_type_id: { type: number, format: int64 }
+
+    TripResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        arrival_location:
+          $ref: '#/components/schemas/LocationResponse'
+        arrival_time: { type: string, format: date-time, nullable: true }
+        comment: { type: string, nullable: true }
+        creator:
+          $ref: '#/components/schemas/User'
+        departure_location:
+          $ref: '#/components/schemas/LocationResponse'
+        departure_time: { type: string, format: date-time, nullable: true }
+        series_id: { type: string, format: uuid, nullable: true }
+        status: { type: string }
+        transport_type:
+          $ref: '#/components/schemas/TransportType'
 
 paths:
-  /test:
+  /me:
     get:
-      tags:
-        - test
-      operationId: getTest
+      tags: [ Users ]
+      summary: Get current user information
       responses:
         200:
-          description: OK
+          description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TestResponse"
+                $ref: '#/components/schemas/User'
+        401:
+          description: Unauthorized
 
-components:
-  schemas:
-    TestResponse:
-      description: test response
-      type: object
-      required:
-        - fieldOne
-        - fieldTwo
-        - fieldThree
-        - fieldFour
-      properties:
-        fieldOne:
-          type: integer
-          format: int32
-        fieldTwo:
-          type: boolean
-        fieldThree:
-          type: string
-        fieldFour:
-          type: array
-          items:
+  /users:
+    get:
+      tags: [ Users ]
+      summary: Get all users
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags: [ Users ]
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      tags: [ Users ]
+      summary: Get user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
             type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: User not found
+    put:
+      tags: [ Users ]
+      summary: Update user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags: [ Users ]
+      summary: Delete user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: User deleted successfully
+        404:
+          description: User not found
+
+  /locations:
+    get:
+      tags: [ Locations ]
+      summary: Get all locations
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocationResponse'
+    post:
+      tags: [ Locations ]
+      summary: Create a new location
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationRequest'
+      responses:
+        201:
+          description: Location created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+
+  /locations/{id}:
+    get:
+      tags: [ Locations ]
+      summary: Get location by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+        404:
+          description: Location not found
+    put:
+      tags: [ Locations ]
+      summary: Update location
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationRequest'
+      responses:
+        200:
+          description: Location updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+    delete:
+      tags: [ Locations ]
+      summary: Delete location
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Location deleted successfully
+        404:
+          description: Location not found
+
+  /transport-types:
+    get:
+      tags: [ TransportTypes ]
+      summary: Get all transport types
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransportType'
+    post:
+      tags: [ TransportTypes ]
+      summary: Create a new transport type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransportType'
+      responses:
+        201:
+          description: Transport type created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportType'
+
+  /transport-types/{id}:
+    get:
+      tags: [ TransportTypes ]
+      summary: Get transport type by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportType'
+        404:
+          description: Transport type not found
+    put:
+      tags: [ TransportTypes ]
+      summary: Update transport type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransportType'
+      responses:
+        200:
+          description: Transport type updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportType'
+    delete:
+      tags: [ TransportTypes ]
+      summary: Delete transport type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Transport type deleted successfully
+        404:
+          description: Transport type not found
+
+  /location-types:
+    get:
+      tags: [ LocationTypes ]
+      summary: Get all location types
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocationType'
+    post:
+      tags: [ LocationTypes ]
+      summary: Create a new location type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationType'
+      responses:
+        201:
+          description: Location type created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationType'
+
+  /location-types/{id}:
+    get:
+      tags: [ LocationTypes ]
+      summary: Get location type by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationType'
+        404:
+          description: Location type not found
+    put:
+      tags: [ LocationTypes ]
+      summary: Update location type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationType'
+      responses:
+        200:
+          description: Location type updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationType'
+    delete:
+      tags: [ LocationTypes ]
+      summary: Delete location type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Location type deleted successfully
+        404:
+          description: Location type not found
+
+  /timetables:
+    get:
+      tags: [ Timetables ]
+      summary: Get all timetables
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Timetable'
+    post:
+      tags: [ Timetables ]
+      summary: Create a new timetable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Timetable'
+      responses:
+        201:
+          description: Timetable created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timetable'
+
+  /timetables/{id}:
+    get:
+      tags: [ Timetables ]
+      summary: Get timetable by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timetable'
+        404:
+          description: Timetable not found
+    put:
+      tags: [ Timetables ]
+      summary: Update timetable
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Timetable'
+      responses:
+        200:
+          description: Timetable updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timetable'
+    delete:
+      tags: [ Timetables ]
+      summary: Delete timetable
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Timetable deleted successfully
+        404:
+          description: Timetable not found
+
+  /trips:
+    get:
+      tags: [ Trips ]
+      summary: Get all trips (supports filtering)
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TripResponse'
+        400:
+          description: Bad request. Please check your filtering parameters
+      parameters:
+        - name: arrival_time
+          in: query
+          description: |
+            Фильтр по времени прибытия.
+            Можно использовать операторы сравнения - gt (greater than), gte (greater than or equal),
+            lt (less than), lte (less than or equal), eq (equal).
+            Пример: `gt:2023-10-01T00:00:00Z`, `lt:2023-10-31T23:59:59Z`
+          required: false
+          schema:
+            type: string
+            example: "gt:2023-10-01T00:00:00Z"
+        - name: departure_time
+          in: query
+          description: |
+            Фильтр по времени отправления.
+            Поддерживает те же операторы сравнения, что и arrival_time.
+          required: false
+          schema:
+            type: string
+            example: "gte:2023-10-01T08:00:00Z"
+        - name: arrival_location_id
+          in: query
+          description: |
+            Фильтр по ID места прибытия.
+            Можно указать несколько значений через запятую.
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: departure_location_id
+          in: query
+          description: |
+            Фильтр по ID места отправления.
+            Можно указать несколько значений через запятую.
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440001"
+        - name: transport_type_id
+          in: query
+          description: |
+            Фильтр по ID типа транспорта.
+            Можно указать несколько значений через запятую.
+          required: false
+          schema:
+            type: number
+            format: int64
+            example: "1,2,3"
+    post:
+      tags: [ Trips ]
+      summary: Create a new trip
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripRequest'
+      responses:
+        201:
+          description: Trip created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripResponse'
+
+  /trips/{id}:
+    get:
+      tags: [ Trips ]
+      summary: Get trip by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripResponse'
+        404:
+          description: Trip not found
+    put:
+      tags: [ Trips ]
+      summary: Update trip
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripRequest'
+      responses:
+        200:
+          description: Trip updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripResponse'
+    delete:
+      tags: [ Trips ]
+      summary: Delete trip
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Trip deleted successfully
+        404:
+          description: Trip not found

@@ -5,22 +5,24 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration {
 
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(
+        http: HttpSecurity,
+        jwtAuthFilter: JwtAuthFilter
+    ): SecurityFilterChain {
         http
             .authorizeHttpRequests {
                 it.requestMatchers("/readyz").permitAll()
 
                 it.anyRequest().authenticated()
             }
-            .oauth2ResourceServer {
-                it.jwt { }
-            }
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
             .csrf { it.disable() }
             .cors { it.disable() }
             .formLogin { it.disable() }

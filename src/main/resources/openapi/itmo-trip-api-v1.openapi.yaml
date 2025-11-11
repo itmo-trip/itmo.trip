@@ -8,42 +8,85 @@ servers:
   - url: http://localhost:8080/api/v1
 
 tags:
-  - name: test
-    description: test
+  - name: auth
+    description: auth
 
 paths:
-  /test:
-    get:
+  /auth/login:
+    post:
       tags:
-        - test
-      operationId: getTest
+        - auth
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLoginRequest"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TestResponse"
+                $ref: "#/components/schemas/UserLoginResponse"
+        400:
+          $ref: '#/components/responses/ErrorResponse'
+        401:
+          $ref: '#/components/responses/ErrorResponse'
+        422:
+          $ref: '#/components/responses/ErrorResponse'
+        500:
+          $ref: '#/components/responses/ErrorResponse'
 
 components:
   schemas:
-    TestResponse:
-      description: test response
+    UserLoginRequest:
+      description: user login request
       type: object
       required:
-        - fieldOne
-        - fieldTwo
-        - fieldThree
-        - fieldFour
+        - username
+        - password
       properties:
-        fieldOne:
-          type: integer
-          format: int32
-        fieldTwo:
-          type: boolean
-        fieldThree:
+        username:
           type: string
-        fieldFour:
-          type: array
-          items:
+        password:
+          type: string
+
+    UserLoginResponse:
+      description: user login response
+      type: object
+      required:
+        - accessToken
+        - refreshToken
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+
+  responses:
+    ErrorResponse:
+      description: Ответ с ошибкой
+      type: object
+      required:
+        - errorCode
+        - errorMessage
+      properties:
+        errorCode:
+          description: Код ошибки
+          type: string
+          minLength: 1
+          example: TournamentForJoiningNotFound
+        errorMessage:
+          description: Описание ошибки
+          type: string
+          minLength: 1
+          example: 'Турнир не найден'
+        errorDetails:
+          description: Детали ошибки для упрощения диагностики
+          type: object
+          example:
+            tournamentId: В турнир с переданным идентификатором невозможно вступить
+          additionalProperties:
             type: string

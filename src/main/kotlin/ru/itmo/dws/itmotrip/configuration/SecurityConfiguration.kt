@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2Authorization
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
 import org.springframework.security.web.SecurityFilterChain
-import ru.itmo.dws.itmotrip.client.my.itmo.CustomAuthorizationRequestResolver
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -42,8 +41,6 @@ class SecurityConfig(
                     .anyRequest().fullyAuthenticated()
             }
             .oauth2Login { oauth2 ->
-                oauth2
-                    .defaultSuccessUrl("/")
             }
 //                oauth2.authorizationEndpoint { auth ->
 //                    auth.authorizationRequestResolver(

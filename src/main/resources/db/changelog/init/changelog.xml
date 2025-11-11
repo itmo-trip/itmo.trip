@@ -5,26 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
 
-    <changeSet id="init-create-transport-types-table" author="quicklybly">
-        <createTable tableName="transport_types">
-            <column name="id" type="bigserial" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name_ru" type="varchar(255)">
-                <constraints unique="true" nullable="false"/>
-            </column>
-            <column name="logo_url" type="text">
-                <constraints nullable="true"/>
-            </column>
-        </createTable>
-
-        <loadData
-                tableName="transport_types"
-                file="transport_types.csv"
-                relativeToChangelogFile="true"
-        />
-    </changeSet>
-
     <changeSet id="init-create-users-table" author="quicklybly">
         <createTable tableName="users">
             <column name="id" type="uuid" defaultValueComputed="uuidv7()">
@@ -59,6 +39,46 @@
         <createIndex indexName="users_student_id_idx" tableName="users" unique="true">
             <column name="student_id"/>
         </createIndex>
+    </changeSet>
+
+    <changeSet id="init-create-transport-types-table" author="quicklybly">
+        <createTable tableName="transport_types">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name_ru" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="logo_url" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <loadData
+                tableName="transport_types"
+                file="transport_types.csv"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="init-create-timetable-table" author="quicklybly">
+        <createTable tableName="timetable">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="start_time_utc" type="time without time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time_utc" type="time without time zone">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <loadData
+                tableName="timetable"
+                file="timetable.csv"
+                relativeToChangelogFile="true"
+        />
     </changeSet>
 
 </databaseChangeLog>

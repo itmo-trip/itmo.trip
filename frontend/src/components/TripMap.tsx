@@ -8,7 +8,7 @@ interface MapComponentProps {
     arrivalAddress: string;
 }
 
-export const Map: React.FC<MapComponentProps> = ({
+export const TripMap: React.FC<MapComponentProps> = ({
                                                               departureCoords,
                                                               arrivalCoords,
                                                               departureAddress,

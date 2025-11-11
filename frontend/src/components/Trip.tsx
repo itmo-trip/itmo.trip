@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import * as React from "react";
 import {AccessTime, DirectionsCar, LocationOn, Repeat, Telegram } from "@mui/icons-material";
 import {Avatar, Box, Chip, Paper } from "@mui/material";
-import {Map} from "./Map.tsx";
+import {TripMap} from "./TripMap.tsx";
 import type {ITrip} from "../models/ITrip.ts";
 import type {FC} from "react";
 
@@ -77,7 +77,7 @@ const Trip: FC<TripProps> = (props) => {
 
                     {/* Карта с маршрутом */}
                     <Box sx={{ height: 200, position: 'relative' }}>
-                        <Map
+                        <TripMap
                             departureCoords={props.tripData.departure_coords}
                             arrivalCoords={props.tripData.arrival_coords}
                             departureAddress='ТЦ Галерея'

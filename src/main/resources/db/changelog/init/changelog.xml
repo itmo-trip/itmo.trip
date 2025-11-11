@@ -5,4 +5,60 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
 
+    <changeSet id="init-create-transport-types-table" author="quicklybly">
+        <createTable tableName="transport_types">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name_ru" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="logo_url" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <loadData
+                tableName="transport_types"
+                file="transport_types.csv"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="init-create-users-table" author="quicklybly">
+        <createTable tableName="users">
+            <column name="id" type="uuid" defaultValueComputed="uuidv7()">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="student_id" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="faculty" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="social_network_username">
+                <constraints nullable="false"/>
+            </column>
+            <column name="avatar_url" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="bio" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="users_student_id_idx" tableName="users" unique="true">
+            <column name="student_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

@@ -116,7 +116,7 @@ components:
 
 paths:
   /auth/login:
-    get:
+    post:
       tags: [ auth ]
       summary: Sign in
       requestBody:

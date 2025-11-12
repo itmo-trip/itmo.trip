@@ -1,8 +1,5 @@
-const API_BASE = "http://localhost:8080/itmo-trip";
-const API_BASE_AVOID_CORS = "/itmo-trip" // смотреть в vite.config.ts
-
-let idToken: string | null = localStorage.getItem("idToken");
-let refreshToken: string | null = localStorage.getItem("refreshToken");
+import AuthUtils from "../services/AuthUtils.ts";
+import {API_BASE, API_BASE_AVOID_CORS} from "./OpenAPI.custom.ts";
 
 export async function login(username: string, password: string): Promise<boolean> {
     try {
@@ -15,13 +12,11 @@ export async function login(username: string, password: string): Promise<boolean
         if (!res.ok) return false;
 
         const data = await res.json();
-        idToken = data.idToken;
-        refreshToken = data.refreshToken;
 
-        // @ts-ignore
-        localStorage.setItem("idToken", idToken);
-        // @ts-ignore
-        localStorage.setItem("refreshToken", refreshToken);
+        console.log(data)
+
+        AuthUtils.setIdToken(data.idToken);
+        AuthUtils.setRefreshToken(data.refreshToken);
 
         return true;
     } catch (error) {
@@ -30,14 +25,13 @@ export async function login(username: string, password: string): Promise<boolean
 }
 
 export function logout() {
-    idToken = null;
-    refreshToken = null;
-
-    localStorage.removeItem("idToken");
-    localStorage.removeItem("refreshToken");
+    // TODO: необходим вызов отдельного эндпоинта для корректного выхода из системы
+    AuthUtils.clearIdToken();
+    AuthUtils.clearRefreshToken();
 }
 
-async function refreshTokens(): Promise<boolean> {
+export async function refreshTokens(): Promise<boolean> {
+    const refreshToken = AuthUtils.getRefreshToken();
     if (!refreshToken) return false;
 
     try {
@@ -53,13 +47,9 @@ async function refreshTokens(): Promise<boolean> {
         }
 
         const data = await res.json();
-        idToken = data.idToken;
-        refreshToken = data.refreshToken;
 
-        // @ts-ignore
-        localStorage.setItem("idToken", idToken);
-        // @ts-ignore
-        localStorage.setItem("refreshToken", refreshToken);
+        AuthUtils.setIdToken(data.idToken);
+        AuthUtils.setRefreshToken(data.refreshToken);
 
         console.log("🔄 Токены обновлены");
         return true;
@@ -74,6 +64,8 @@ export async function apiFetch(
     path: string,
     options: RequestInit = {}
 ): Promise<Response> {
+    const idToken = AuthUtils.getIdToken();
+    const refreshToken = AuthUtils.getRefreshToken();
     const headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${idToken}`,

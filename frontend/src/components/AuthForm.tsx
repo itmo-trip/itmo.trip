@@ -6,7 +6,7 @@ import {
     Typography,
     Box
 } from "@mui/material";
-import {login} from "../api/authApi.ts";
+import {login} from "../api/CustomAuthService.ts";
 
 interface AuthFormProps {
     onSuccess: () => void;

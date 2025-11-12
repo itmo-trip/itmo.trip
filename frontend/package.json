@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:api": "openapi --input ../openapi/itmo-trip-api-v1.openapi.yaml --output ./src/api/generated --client fetch"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -30,11 +31,12 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "openapi-typescript-codegen": "^0.29.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.3",
     "vite": "^7.2.2"
   },
-  "optionalDependencies":  {
+  "optionalDependencies": {
     "@rollup/rollup-linux-arm64-gnu": "^4.0.0"
   }
 }

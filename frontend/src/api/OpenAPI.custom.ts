@@ -2,7 +2,7 @@
 
 import type { ApiRequestOptions } from './generated/core/ApiRequestOptions';
 
-export const API_BASE = "http://localhost:8080/itmo-trip";
+export const API_BASE = import.meta.env.VITE_API_BASE;
 export const API_BASE_AVOID_CORS = "/itmo-trip" // смотреть в vite.config.ts
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;

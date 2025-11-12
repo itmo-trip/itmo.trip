@@ -114,13 +114,14 @@ const Trip: FC<TripProps> = (props) => {
                     </Grid>
                 </Grid>
 
-                 {/*Карта с маршрутом*/}
-                <Box sx={{height: 100, ml: 0.6, mt: 1}}>
+                {/*Карта с маршрутом*/}
+                <Box sx={{height: 150, ml: 0.3, mt: 1}}>
                     <TripMap
                         departureCoords={props.tripData.departure_coords}
                         arrivalCoords={props.tripData.arrival_coords}
-                        departureAddress='ТЦ Галерея'
-                        arrivalAddress='ИТМО на Кронве'
+                        tripDateTime={props.tripData.arrival_time}
+                        isDateTimeArrival={false}
+                        isPublicTransport={false}
                     />
                 </Box>
 

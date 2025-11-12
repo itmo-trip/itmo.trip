@@ -1,6 +1,5 @@
 package ru.itmo.dws.itmotrip.api.handler
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.web.bind.annotation.ExceptionHandler

@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate:api": "openapi --input ../openapi/itmo-trip-api-v1.openapi.yaml --output ./src/api/generated --client fetch"
+    "generate:api": "openapi --input ../openapi/itmo-trip-api-v1.openapi.yaml --output ./src/api/generated --client fetch && node scripts/openapi-patch.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -16,6 +16,7 @@
     "@mui/icons-material": "^7.3.5",
     "@mui/lab": "^7.0.1-beta.19",
     "@mui/material": "^7.3.5",
+    "jwt-decode": "^4.0.0",
     "maplibre-gl": "^5.12.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

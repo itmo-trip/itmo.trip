@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 import ColorModeIconDropdown from '.././theme/ColorModeIconDropdown';
 import Sitemark from './ItmoTripIcon.tsx';
 import {Box, Button, InputBase } from "@mui/material";
-import {logout} from "../api/authApi.ts";
+import {logout} from "../api/CustomAuthService.ts";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: 'flex',
@@ -60,7 +60,7 @@ export default function AppAppBar({ user, onLogout }: { user?: { studentId?: str
 
                         {user?.studentId && (
                             <InputBase
-                                value={`student-id: ${user.studentId}`}
+                                value={`${user.studentId}`}
                                 readOnly
                                 sx={{
                                     borderRadius: 1,

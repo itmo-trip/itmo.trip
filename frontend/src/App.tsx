@@ -6,7 +6,7 @@ import AppAppBar from "./components/AppAppBar.tsx";
 import {useEffect, useState} from "react";
 import {AuthForm} from "./components/AuthForm.tsx";
 import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
-import {getUserProfile} from "./api/authApi.ts";
+import {MeService} from "./api/generated";
 
 function checkAuthFromStorage(): boolean {
     const idToken = localStorage.getItem("idToken");
@@ -20,6 +20,7 @@ function App() {
     const [user, setUser] = useState<{ studentId?: string } | null>(null);
 
     useEffect(() => {
+        handleLoginSuccess()
         if (checkAuthFromStorage()) {
             setIsAuthenticated(true);
         }
@@ -28,8 +29,12 @@ function App() {
     const handleLoginSuccess = async () => {
         setIsAuthenticated(true);
         try {
-            const profile = await getUserProfile();
-            setUser({studentId: profile.studentId});
+            // Пока ждём переезда методов авторизации на бэке
+            //const profile = await getUserProfile();
+            // Ждём переезда методов авторизации на бэке
+            const profile = await MeService.getApiV1Me();
+
+            setUser({studentId: `${profile.first_name} ${profile.last_name} (${profile.student_id})`});
             console.log("Успех нереальный");
         } catch (err) {
             console.error("Не удалось загрузить профиль после логина", err);

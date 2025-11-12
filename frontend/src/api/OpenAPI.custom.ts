@@ -1,0 +1,46 @@
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+import type { ApiRequestOptions } from './generated/core/ApiRequestOptions';
+
+export const API_BASE = "http://localhost:8080/itmo-trip";
+export const API_BASE_AVOID_CORS = "/itmo-trip" // смотреть в vite.config.ts
+
+type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
+type Headers = Record<string, string>;
+
+export type OpenAPIConfig = {
+    BASE: string;
+    VERSION: string;
+    WITH_CREDENTIALS: boolean;
+    CREDENTIALS: 'include' | 'omit' | 'same-origin';
+    TOKEN?: string | Resolver<string> | undefined;
+    USERNAME?: string | Resolver<string> | undefined;
+    PASSWORD?: string | Resolver<string> | undefined;
+    HEADERS?: Headers | Resolver<Headers> | undefined;
+    ENCODE_PATH?: ((path: string) => string) | undefined;
+};
+
+export const OpenAPI: OpenAPIConfig = {
+    BASE: API_BASE_AVOID_CORS,
+    VERSION: '1.0.0',
+    WITH_CREDENTIALS: false,
+    CREDENTIALS: 'include',
+    TOKEN: undefined,
+    USERNAME: undefined,
+    PASSWORD: undefined,
+    HEADERS: async (_: ApiRequestOptions): Promise<Headers> => {
+        const headers: Headers = {
+            'Content-Type': 'application/json',
+        };
+
+        const idToken = localStorage.getItem("idToken");
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        headers['Authorization'] = `Bearer ${idToken}`;
+        headers['Refresh'] = refreshToken!;
+        return headers;
+    },
+    ENCODE_PATH: undefined,
+};

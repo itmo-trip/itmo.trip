@@ -3,26 +3,31 @@ package ru.itmo.dws.itmotrip.api
 import api.myitmo.model.other.TokenResponse
 import api.myitmo.utils.AuthHelper
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
-import ru.itmo.dws.itmotrip.dto.LoginRequestDto
-import ru.itmo.dws.itmotrip.dto.RefreshRequestDto
+import org.springframework.stereotype.Component
+import ru.itmo.dws.itmotrip.generated.apis.AuthApiDelegate
+import ru.itmo.dws.itmotrip.generated.models.LoginRequest
+import ru.itmo.dws.itmotrip.generated.models.LoginResponse
+import ru.itmo.dws.itmotrip.generated.models.RefreshRequest
 
-@RestController
-class AuthController(
-    private val authHelper: AuthHelper,
-) {
+@Component
+class AuthController(private val authHelper: AuthHelper) : AuthApiDelegate {
 
-    @PostMapping("/auth/login")
-    fun login(@RequestBody request: LoginRequestDto): ResponseEntity<TokenResponse> {
-        val authResponse = authHelper.auth(request.username, request.password)
-        return ResponseEntity.ok(authResponse)
+    override fun apiV1AuthLoginPost(loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
+        val authResponse = authHelper.auth(loginRequest.username, loginRequest.password)
+        return ResponseEntity.ok(authResponse.toLoginResponse())
     }
 
-    @PostMapping("/auth/refresh")
-    fun refresh(@RequestBody request: RefreshRequestDto): ResponseEntity<TokenResponse> {
-        val authResponse = authHelper.refreshTokens(request.refreshToken)
-        return ResponseEntity.ok(authResponse)
+    override fun apiV1AuthRefreshPost(refreshRequest: RefreshRequest): ResponseEntity<LoginResponse> {
+        val authResponse = authHelper.refreshTokens(refreshRequest.refreshToken)
+        return ResponseEntity.ok(authResponse.toLoginResponse())
     }
+
+    private fun TokenResponse.toLoginResponse() = LoginResponse(
+        accessToken = accessToken,
+        expiresIn = expiresIn,
+        refreshToken = refreshToken,
+        refreshExpiresIn = refreshExpiresIn,
+        idToken = idToken,
+        sessionState = sessionState,
+    )
 }

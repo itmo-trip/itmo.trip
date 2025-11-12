@@ -1,4 +1,4 @@
-package ru.itmo.dws.itmotrip.service.jwt
+package ru.itmo.dws.itmotrip.security.jwt
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder

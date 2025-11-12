@@ -52,3 +52,7 @@ management:
 logging:
   level:
     root: INFO
+
+openapi:
+  iTMOTrip:
+    base-path: /

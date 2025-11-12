@@ -15,7 +15,7 @@ import ru.itmo.dws.itmotrip.model.JwtModel
 import ru.itmo.dws.itmotrip.model.User
 import ru.itmo.dws.itmotrip.service.MyItmoService
 import ru.itmo.dws.itmotrip.service.UserService
-import ru.itmo.dws.itmotrip.service.jwt.ItmoJwtVerifier
+import ru.itmo.dws.itmotrip.security.jwt.ItmoJwtVerifier
 
 @Component
 class JwtAuthFilter(

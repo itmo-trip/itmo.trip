@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 class MyItmoService(
     private val myItmo: MyItmo,
 ) {
+
     fun getPersonByIsuId(isuId: Int): Personality {
         val getPersonalityRequest = myItmo.api().getPersonality(isuId)
         val response = getPersonalityRequest.execute()

@@ -1,7 +1,5 @@
 package ru.itmo.dws.itmotrip.service
 
-import java.util.*
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -13,13 +11,7 @@ class UserDetailsServiceImpl(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
-        val isuUser = userService.getByIsuId(username)
+        return userService.getByIsuId(username)
             ?: throw UsernameNotFoundException("User not found with ID: $username")
-
-        return User(
-            isuUser.id.toString(),
-            "",
-            emptyList()
-        )
     }
 }

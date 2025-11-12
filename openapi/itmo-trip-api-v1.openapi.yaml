@@ -14,29 +14,52 @@ components:
       properties:
         username: { type: string }
         password: { type: string, format: password }
+      required:
+        - username
+        - password
+
+    RefreshRequest:
+      type: object
+      properties:
+        refresh_token: { type: string }
+      required:
+        - refresh_token
 
     LoginResponse:
       type: object
       properties:
-        accessToken: { type: string }
-        expiresIn: { type: integer, format: int64 }
-        refreshToken: { type: string }
-        refreshExpiresIn: { type: integer, format: int64 }
-        idToken: { type: string }
-        sessionState: { type: string, format: uuid }
+        access_token: { type: string }
+        expires_in: { type: integer, format: int64 }
+        refresh_token: { type: string }
+        refresh_expires_in: { type: integer, format: int64 }
+        id_token: { type: string }
+        session_state: { type: string }
+      required:
+        - access_token
+        - expires_in
+        - refresh_token
+        - refresh_expires_in
+        - id_token
+        - session_state
 
     LocationTypeResponse:
       type: object
       properties:
         id: { type: integer, format: int64 }
         code: { type: string }
+      required:
+        - id
+        - code
 
     TransportTypeResponse:
       type: object
       properties:
         id: { type: integer, format: int64 }
-        logo_url: { type: string, nullable: true }
+        logo_url: { type: string }
         name_ru: { type: string }
+      required:
+        - id
+        - name_ru
 
     TimetableResponse:
       type: object
@@ -44,25 +67,35 @@ components:
         id: { type: integer, format: int64 }
         end_time_utc: { type: string, format: time }
         start_time_utc: { type: string, format: time }
+      required:
+        - id
+        - start_time_utc
+        - end_time_utc
 
     UserRequest:
       type: object
       properties:
-        bio: { type: string, nullable: true }
+        bio: { type: string }
         social_network_username: { type: string }
 
     UserResponse:
       type: object
       properties:
         id: { type: string, format: uuid }
-        avatar_url: { type: string, nullable: true }
-        bio: { type: string, nullable: true }
+        avatar_url: { type: string, }
+        bio: { type: string, }
         faculty: { type: string }
         first_name: { type: string }
         last_name: { type: string }
-        middle_name: { type: string, nullable: true }
+        middle_name: { type: string, }
         social_network_username: { type: string }
         student_id: { type: string }
+      required:
+        - id
+        - faculty
+        - first_name
+        - last_name
+        - student_id
 
     LocationRequest:
       type: object
@@ -71,6 +104,11 @@ components:
         location_type_id: { type: integer, format: int64 }
         longitude: { type: number, format: int64 }
         name: { type: string }
+      required:
+        - latitude
+        - location_type_id
+        - longitude
+        - name
 
     LocationResponse:
       type: object
@@ -83,18 +121,28 @@ components:
           $ref: '#/components/schemas/LocationTypeResponse'
         longitude: { type: number, format: int64 }
         name: { type: string }
+      required:
+        - id
+        - latitude
+        - location_type
+        - longitude
+        - name
 
     TripRequest:
       type: object
       properties:
         arrival_location_id: { type: string, format: uuid }
-        arrival_time: { type: string, format: date-time, nullable: true }
-        comment: { type: string, nullable: true }
+        arrival_time: { type: string, format: date-time, }
+        comment: { type: string, }
         departure_location_id: { type: string, format: uuid }
-        departure_time: { type: string, format: date-time, nullable: true }
-        series_id: { type: string, format: uuid, nullable: true }
+        departure_time: { type: string, format: date-time, }
+        series_id: { type: string, format: uuid, }
         status: { type: string }
         transport_type_id: { type: integer, format: int64 }
+      required:
+        - arrival_location_id
+        - departure_location_id
+        - transport_type_id
 
     TripResponse:
       type: object
@@ -102,17 +150,24 @@ components:
         id: { type: string, format: uuid }
         arrival_location:
           $ref: '#/components/schemas/LocationResponse'
-        arrival_time: { type: string, format: date-time, nullable: true }
-        comment: { type: string, nullable: true }
+        arrival_time: { type: string, format: date-time, }
+        comment: { type: string, }
         creator:
           $ref: '#/components/schemas/UserResponse'
         departure_location:
           $ref: '#/components/schemas/LocationResponse'
-        departure_time: { type: string, format: date-time, nullable: true }
-        series_id: { type: string, format: uuid, nullable: true }
+        departure_time: { type: string, format: date-time, }
+        series_id: { type: string, format: uuid, }
         status: { type: string }
         transport_type:
           $ref: '#/components/schemas/TransportTypeResponse'
+      required:
+        - id
+        - arrival_location
+        - departure_location
+        - status
+        - creator
+        - transport_type
 
 paths:
   /api/v1/auth/login:
@@ -125,6 +180,26 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        401:
+          description: Unauthorized. Please check your credentials
+
+  /api/v1/auth/refresh:
+    post:
+      tags: [ auth ]
+      summary: Refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
       responses:
         200:
           description: Successful operation
@@ -192,6 +267,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        403:
+          description: 'Forbidden. You can only update your own profile'
 
   /api/v1/locations:
     get:

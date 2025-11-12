@@ -1,5 +1,7 @@
 package ru.itmo.dws.itmotrip.model
 
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.UUID
 
 data class User(
@@ -12,4 +14,10 @@ data class User(
     val socialNetworkUsername: String?,
     val avatarUrl: String?,
     val bio: String?,
-)
+) : UserDetails {
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf()
+
+    override fun getPassword(): String = ""
+    override fun getUsername(): String = id.toString()
+}

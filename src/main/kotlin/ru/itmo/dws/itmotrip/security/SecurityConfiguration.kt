@@ -16,12 +16,12 @@ class SecurityConfiguration {
     @Bean
     fun filterChain(
         http: HttpSecurity,
-        jwtAuthFilter: JwtAuthFilter
+        jwtAuthFilter: JwtAuthFilter,
     ): SecurityFilterChain {
         http
             .authorizeHttpRequests {
                 it.requestMatchers("/readyz").permitAll()
-                it.requestMatchers("/auth/*").permitAll()
+                it.requestMatchers("/api/v1/auth/*").permitAll()
                 it.requestMatchers(HttpMethod.GET).permitAll()
 
                 it.anyRequest().authenticated()

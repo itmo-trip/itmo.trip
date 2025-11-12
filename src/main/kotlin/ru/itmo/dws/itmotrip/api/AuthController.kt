@@ -8,17 +8,22 @@ import ru.itmo.dws.itmotrip.generated.apis.AuthApiDelegate
 import ru.itmo.dws.itmotrip.generated.models.LoginRequest
 import ru.itmo.dws.itmotrip.generated.models.LoginResponse
 import ru.itmo.dws.itmotrip.generated.models.RefreshRequest
+import ru.itmo.dws.itmotrip.model.exception.UnauthorizedException
 
 @Component
 class AuthController(private val authHelper: AuthHelper) : AuthApiDelegate {
 
     override fun apiV1AuthLoginPost(loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
-        val authResponse = authHelper.auth(loginRequest.username, loginRequest.password)
+        val authResponse = runCatching {
+            authHelper.auth(loginRequest.username, loginRequest.password)
+        }.getOrElse { throw UnauthorizedException("failed to authorize", it) }
         return ResponseEntity.ok(authResponse.toLoginResponse())
     }
 
     override fun apiV1AuthRefreshPost(refreshRequest: RefreshRequest): ResponseEntity<LoginResponse> {
-        val authResponse = authHelper.refreshTokens(refreshRequest.refreshToken)
+        val authResponse = runCatching {
+            authHelper.refreshTokens(refreshRequest.refreshToken)
+        }.getOrElse { throw UnauthorizedException("failed to refresh", it) }
         return ResponseEntity.ok(authResponse.toLoginResponse())
     }
 

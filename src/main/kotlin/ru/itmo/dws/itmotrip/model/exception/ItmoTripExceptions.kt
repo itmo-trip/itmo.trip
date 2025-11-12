@@ -10,6 +10,10 @@ open class ItmoTripException(
     open val statusCode: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR
 }
 
+class UnauthorizedException(message: String, exception: Throwable?) : ItmoTripException(message, exception) {
+    override val statusCode: HttpStatus = HttpStatus.UNAUTHORIZED
+}
+
 open class NotFoundException(
     entityName: String,
     entityId: String,

@@ -11,7 +11,7 @@ export default function TripsTape() {
             <Box sx={{ width: '100%' }}>
                 <Masonry
                     columns={{ xs: 1, md: 2 }}
-                    spacing={3}
+                    spacing={2}
                 >
                     {trips.map((tr, index) => (
                         <div key={index}>

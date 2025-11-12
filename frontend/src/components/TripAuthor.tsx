@@ -13,6 +13,7 @@ export const TripAuthor: FC<TripAuthorProps> = (props) => {
         <Grid>
             <Box
                 sx={{
+                    mt: -1,
                     p: 2,
                     borderTop: 1,
                     borderColor: 'divider',
@@ -65,6 +66,7 @@ export const TripAuthor: FC<TripAuthorProps> = (props) => {
                                             variant="outlined"
                                             clickable
                                             color="primary"
+                                            style={{color: '#2e7d32'}}
                                         />
                                     )}
                                 </Box>

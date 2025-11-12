@@ -4,7 +4,7 @@ import {styled} from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import * as React from "react";
-import {AccessTime, CalendarToday, DirectionsCar, LocationOn, Repeat} from "@mui/icons-material";
+import {AccessTime, CalendarToday, DirectionsCar, LocationOn} from "@mui/icons-material";
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import {Box} from "@mui/material";
 import {TripMap} from "./TripMap.tsx";
@@ -82,34 +82,47 @@ const Trip: FC<TripProps> = (props) => {
         >
 
             {/* Трип */}
-            <CardContent sx={{flexGrow: 1, p: 2}}>
+            <CardContent sx={{flexGrow: 1, p: 2, pb: 0, mb: 0}}>
                 {/* Заголовок маршрута */}
                 <Box sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mb: 0.5}}>
                     <LocationOn sx={{color: 'primary.main', mr: 0.6, fontSize: 20, ml: -0.4}}/>
-                    <Typography variant="h6" component="div" sx={{fontWeight: 'bold', mt: 0.3}}>
-                        {'Площадь восстания'} → {'ИТМО (Кронверский)'}
+                    <Typography variant="h6" sx={{fontWeight: 'bold', lineHeight: 1, mt: 0.3}}>
+                        {'Площадь восстания'} {} → {'ИТМО на Кронверском'}
                     </Typography>
                 </Box>
 
-                {/* Дата и время прибытия */}
-                <Grid container justifyContent={'flex-start'} gap={2} alignItems={'center'}>
-                    <Grid container sx={{ml: 0}}>
-                        <CalendarToday sx={{color: 'text.secondary', mr: 1, mt: 0.32, fontSize: 14}}/>
-                        <Box>
+                {/* Дата и время прибытия, вид транспорта */}
+                <Grid container justifyContent={'flex-start'} columnSpacing={2} rowSpacing={-10} alignItems={'center'}>
+                    <Grid container>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            <CalendarToday sx={{color: 'text.secondary', mr: 1, ml: 0.1, mt: -0.1, fontSize: 14}}/>
                             <Typography variant="body1" fontWeight="medium">
                                 {formatDate(new Date(props.tripData.arrival_time))}
+                            </Typography>
+                        </Box>
+
+                    </Grid>
+
+                    <Grid container>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            <AccessTime sx={{color: 'text.secondary', mr: 0.5, fontSize: 18}}/>
+                            <Typography variant="body1" fontWeight="medium">
+                                Прибытие: {formatTime(new Date(props.tripData.arrival_time))}
                             </Typography>
                         </Box>
                     </Grid>
 
                     <Grid container>
-                        <Box sx={{display: 'flex', alignItems: 'center', flex: 1}}>
-                            <AccessTime sx={{color: 'text.secondary', mr: 0.5, fontSize: 18}}/>
-                            <Box>
-                                <Typography variant="body1" fontWeight="medium">
-                                    Прибытие: {formatTime(new Date(props.tripData.arrival_time))}
-                                </Typography>
-                            </Box>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            {props.tripData.transport_type === 'Общественный транспорт' ?
+                                <DirectionsBusIcon
+                                    sx={{color: 'text.secondary', mr: 0.6, mb: 0.2, ml: -0.2, fontSize: 18}}/> :
+                                <DirectionsCar
+                                    sx={{color: 'text.secondary', mr: 0.6, mb: 0.25, ml: -0.2, fontSize: 18}}/>
+                            }
+                            <Typography variant="body1" fontWeight="medium">
+                                {props.tripData.transport_type}
+                            </Typography>
                         </Box>
                     </Grid>
                 </Grid>
@@ -125,25 +138,6 @@ const Trip: FC<TripProps> = (props) => {
                     />
                 </Box>
 
-                <Grid container justifyContent={'flex-start'} gap={2} alignItems={'center'} sx={{mt: 1}}>
-                    <Box sx={{display: 'flex', alignItems: 'center'}} gap={0.5}>
-                        {props.tripData.transport_type === 'Общественный транспорт' ?
-                            <DirectionsBusIcon sx={{color: 'text.secondary', mb: 0.2, ml: -0.2, fontSize: 18}}/> :
-                            <DirectionsCar sx={{color: 'text.secondary', mb: 0.25, ml: -0.2, fontSize: 18}}/>
-                        }
-                        <Typography variant="body2" color="text.secondary">
-                            {props.tripData.transport_type}
-                        </Typography>
-                    </Box>
-
-                    <Box sx={{display: 'flex', alignItems: 'center'}} gap={0.5}>
-                        <Repeat sx={{color: 'text.secondary', fontSize: 18}}/>
-                        <Typography variant="body2" color="text.secondary">
-                            {props.tripData.trip_frequency}
-                        </Typography>
-                    </Box>
-                </Grid>
-
                 {props.tripData.comment && (
                     <Box
                         sx={{
@@ -154,6 +148,11 @@ const Trip: FC<TripProps> = (props) => {
                             border: '1px solid',
                             borderColor: 'divider',
                             position: 'relative',
+                            display: 'table',
+                            maxWidth: '100%',
+                            textAlign: 'left',
+                            mx: 0,
+                            alignSelf: 'flex-start',
                             '&::before': {
                                 content: '""',
                                 position: 'absolute',
@@ -171,14 +170,14 @@ const Trip: FC<TripProps> = (props) => {
                             color="text.primary"
                             sx={{
                                 fontStyle: 'italic',
-                                lineHeight: 0.8
+                                lineHeight: 0.8,
+                                textAlign: 'left'
                             }}
                         >
                             {props.tripData.comment}
                         </Typography>
                     </Box>
                 )}
-
             </CardContent>
 
             <TripAuthor author={props.tripData.author}/>

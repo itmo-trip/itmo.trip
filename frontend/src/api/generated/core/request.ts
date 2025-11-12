@@ -2,12 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import { ApiError } from './ApiError';
-import type { ApiRequestOptions } from './ApiRequestOptions';
-import type { ApiResult } from './ApiResult';
-import { CancelablePromise } from './CancelablePromise';
-import type { OnCancel } from './CancelablePromise';
-import type { OpenAPIConfig } from './OpenAPI';
+import {ApiError} from './ApiError';
+import type {ApiRequestOptions} from './ApiRequestOptions';
+import type {ApiResult} from './ApiResult';
+import {CancelablePromise} from './CancelablePromise';
+import type {OnCancel} from './CancelablePromise';
+import type {OpenAPIConfig} from '../../OpenAPI.custom';
 
 export const isDefined = <T>(value: T | null | undefined): value is Exclude<T, null | undefined> => {
     return value !== undefined && value !== null;
@@ -312,7 +312,6 @@ export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): C
                 };
 
                 catchErrorCodes(options, result);
-
                 resolve(result.body);
             }
         } catch (error) {

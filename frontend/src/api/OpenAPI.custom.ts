@@ -1,7 +1,5 @@
-/* generated using openapi-typescript-codegen -- do not edit */
-/* istanbul ignore file */
-/* tslint:disable */
-/* eslint-disable */
+/* При изменении пути к файлу обновлять openapi-patch.js!! */
+
 import type { ApiRequestOptions } from './generated/core/ApiRequestOptions';
 
 export const API_BASE = "http://localhost:8080/itmo-trip";

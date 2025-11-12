@@ -1,3 +1,5 @@
+/* При изменении пути к файлу обновлять openapi-patch.js!! */
+
 import { request as generatedRequest } from "./generated/core/request.ts";
 import type { ApiRequestOptions } from "./generated/core/ApiRequestOptions.ts";
 import type { OpenAPIConfig } from "./generated";

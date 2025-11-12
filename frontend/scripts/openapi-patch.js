@@ -6,15 +6,16 @@ const root = path.resolve("src/api/generated");
 function patchFile(filePath) {
     let content = fs.readFileSync(filePath, "utf8");
 
-    content = content.replace(
-        "from '../core/request';",
-        "from '../../request.custom';"
-    );
+    const replacements = {
+        "from '../core/request'": "from '../../request.custom'",
+        "from '../core/OpenAPI'": "from '../../OpenAPI.custom'",
+        "from './OpenAPI'": "from '../../OpenAPI.custom'",
+        "from './core/OpenAPI'": "from '../OpenAPI.custom'",
+    };
 
-    content = content.replace(
-        "from '../core/OpenAPI';",
-        "from '../../OpenAPI.custom';"
-    );
+    for (const [from, to] of Object.entries(replacements)) {
+        content = content.replaceAll(from, to);
+    }
 
     fs.writeFileSync(filePath, content);
     console.log("✅ Patched:", path.relative(process.cwd(), filePath));
@@ -29,4 +30,4 @@ function walk(dir) {
 }
 
 walk(root);
-console.log("Все импорты request → CustomRequest заменены");
+console.log("Все импорты request и OpenAPI заменены на request.custom и OpenAPI.custom");

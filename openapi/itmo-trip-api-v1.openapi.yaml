@@ -19,29 +19,29 @@ components:
       type: object
       properties:
         accessToken: { type: string }
-        expiresIn: { type: number, format: int64 }
+        expiresIn: { type: integer, format: int64 }
         refreshToken: { type: string }
-        refreshExpiresIn: { type: number, format: int64 }
+        refreshExpiresIn: { type: integer, format: int64 }
         idToken: { type: string }
         sessionState: { type: string, format: uuid }
 
     LocationTypeResponse:
       type: object
       properties:
-        id: { type: number, format: int64 }
+        id: { type: integer, format: int64 }
         code: { type: string }
 
     TransportTypeResponse:
       type: object
       properties:
-        id: { type: number, format: int64 }
+        id: { type: integer, format: int64 }
         logo_url: { type: string, nullable: true }
         name_ru: { type: string }
 
     TimetableResponse:
       type: object
       properties:
-        id: { type: number, format: int64 }
+        id: { type: integer, format: int64 }
         end_time_utc: { type: string, format: time }
         start_time_utc: { type: string, format: time }
 
@@ -67,9 +67,9 @@ components:
     LocationRequest:
       type: object
       properties:
-        latitude: { type: number, format: double }
-        location_type_id: { type: number, format: int64 }
-        longitude: { type: number, format: double }
+        latitude: { type: number, format: int64 }
+        location_type_id: { type: integer, format: int64 }
+        longitude: { type: number, format: int64 }
         name: { type: string }
 
     LocationResponse:
@@ -78,10 +78,10 @@ components:
         id: { type: string, format: uuid }
         creator:
           $ref: '#/components/schemas/UserResponse'
-        latitude: { type: number, format: double }
+        latitude: { type: number, format: int64 }
         location_type:
           $ref: '#/components/schemas/LocationTypeResponse'
-        longitude: { type: number, format: double }
+        longitude: { type: number, format: int64 }
         name: { type: string }
 
     TripRequest:
@@ -94,7 +94,7 @@ components:
         departure_time: { type: string, format: date-time, nullable: true }
         series_id: { type: string, format: uuid, nullable: true }
         status: { type: string }
-        transport_type_id: { type: number, format: int64 }
+        transport_type_id: { type: integer, format: int64 }
 
     TripResponse:
       type: object
@@ -365,7 +365,7 @@ paths:
             Можно указать несколько значений через запятую.
           required: false
           schema:
-            type: number
+            type: integer
             format: int64
             example: "1,2,3"
     post:

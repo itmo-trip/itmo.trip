@@ -117,6 +117,11 @@ val generateApi = tasks.register<GenerateTask>("generateApi", fun GenerateTask.(
             "apiSuffix" to "Api",
         )
     )
+    typeMappings.set(
+        mapOf(
+            "int64" to "java.lang.Long",
+        )
+    )
 })
 
 val generateFront = tasks.register<GenerateTask>("generateFront", fun GenerateTask.() {

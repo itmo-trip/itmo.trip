@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8080/itmo-trip/api/v1
+  - url: http://localhost:8080/itmo-trip
 
 components:
   schemas:
@@ -115,7 +115,7 @@ components:
           $ref: '#/components/schemas/TransportTypeResponse'
 
 paths:
-  /auth/login:
+  /api/v1/auth/login:
     post:
       tags: [ auth ]
       summary: Sign in
@@ -135,7 +135,7 @@ paths:
         401:
           description: Unauthorized. Please check your credentials
 
-  /me:
+  /api/v1/me:
     get:
       tags: [ me ]
       summary: Get current user's information
@@ -149,7 +149,7 @@ paths:
         401:
           description: Unauthorized
 
-  /users/{id}:
+  /api/v1/users/{id}:
     get:
       tags: [ users ]
       summary: Get user by ID
@@ -193,7 +193,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserResponse'
 
-  /locations:
+  /api/v1/locations:
     get:
       tags: [ locations ]
       summary: Get all locations
@@ -223,7 +223,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LocationResponse'
 
-  /locations/my:
+  /api/v1/locations/my:
     get:
       tags: [ locations ]
       summary: Get current user's locations
@@ -237,7 +237,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/LocationResponse'
 
-  /locations/{id}:
+  /api/v1/locations/{id}:
     get:
       tags: [ locations ]
       summary: Get location by ID
@@ -302,7 +302,7 @@ paths:
         404:
           description: Location not found
 
-  /trips:
+  /api/v1/trips:
     get:
       tags: [ trips ]
       summary: Get all trips (supports filtering)
@@ -385,7 +385,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TripResponse'
 
-  /trips/{id}:
+  /api/v1/trips/{id}:
     get:
       tags: [ trips ]
       summary: Get trip by ID
@@ -450,7 +450,7 @@ paths:
         404:
           description: Trip not found
 
-  /transport-types:
+  /api/v1/transport-types:
     get:
       tags: [ transport-types ]
       summary: Get all transport types
@@ -464,7 +464,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/TransportTypeResponse'
 
-  /location-types:
+  /api/v1/location-types:
     get:
       tags: [ location-types ]
       summary: Get all location types
@@ -478,7 +478,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/LocationTypeResponse'
 
-  /timetables:
+  /api/v1/timetables:
     get:
       tags: [ timetables ]
       summary: Get all timetables

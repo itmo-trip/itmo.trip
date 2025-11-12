@@ -9,7 +9,7 @@ data class User(
     val firstName: String,
     val middleName: String?,
     val lastName: String,
-    val socialNetworkUsername: String,
+    val socialNetworkUsername: String?,
     val avatarUrl: String?,
     val bio: String?,
 )

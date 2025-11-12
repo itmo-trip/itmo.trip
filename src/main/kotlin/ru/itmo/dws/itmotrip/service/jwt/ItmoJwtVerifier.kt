@@ -1,4 +1,4 @@
-package ru.itmo.dws.itmotrip.configuration
+package ru.itmo.dws.itmotrip.service.jwt
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
@@ -46,16 +46,16 @@ class ItmoJwtVerifier {
 
     fun parseJWTToModel(decodedJWT: DecodedJWT): JwtModel {
         val isu = decodedJWT.getClaim("isu")?.asInt()
+            ?: throw RuntimeException("Can't get isu from token")
         val givenName = decodedJWT.getClaim("given_name")?.asString()
+            ?: throw RuntimeException("Can't get givenName from token")
         val familyName = decodedJWT.getClaim("family_name")?.asString()
+            ?: throw RuntimeException("Can't get familyName from token")
 
-        // middle_name может отсутствовать
         val middleName = decodedJWT.getClaim("middle_name")?.asString()
 
-        // picture — может быть пустым
         val picture = decodedJWT.getClaim("picture")?.asString()
 
-        // faculty берём из первого элемента массива groups
         val groups = decodedJWT.getClaim("groups")?.asList(Map::class.java)
         val facultyName = if (!groups.isNullOrEmpty()) {
             val firstGroup = groups.first()
@@ -64,12 +64,12 @@ class ItmoJwtVerifier {
         } else ""
 
         return JwtModel(
-            isuId = isu!!,
+            isuId = isu,
             faculty = facultyName,
-            givenName = givenName!!,
-            familyName = familyName!!,
+            givenName = givenName,
+            familyName = familyName,
             middleName = middleName,
-            picture = picture!!
+            picture = picture
         )
     }
 }

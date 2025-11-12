@@ -1,5 +1,6 @@
-package ru.itmo.dws.itmotrip.configuration
+package ru.itmo.dws.itmotrip.security.filter
 
+import api.myitmo.model.personality.Personality
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -14,6 +15,7 @@ import ru.itmo.dws.itmotrip.model.JwtModel
 import ru.itmo.dws.itmotrip.model.User
 import ru.itmo.dws.itmotrip.service.MyItmoService
 import ru.itmo.dws.itmotrip.service.UserService
+import ru.itmo.dws.itmotrip.service.jwt.ItmoJwtVerifier
 
 @Component
 class JwtAuthFilter(
@@ -25,6 +27,7 @@ class JwtAuthFilter(
 
     companion object {
         private const val AUTH_HEADER = "Authorization"
+        private const val REFRESH_TOKEN = "Refresh"
         private const val BEARER = "Bearer "
     }
 
@@ -34,30 +37,44 @@ class JwtAuthFilter(
         filterChain: FilterChain
     ) {
         val authHeader = request.getHeader(AUTH_HEADER)
+        val refreshHeader = request.getHeader(REFRESH_TOKEN)
 
         if (authHeader == null || !authHeader.startsWith(BEARER)) {
             filterChain.doFilter(request, response)
-            return;
+            return
+        }
+
+        if (refreshHeader != null) {
+            myItmoService.getMyItmo().storage.refreshToken = refreshHeader
         }
 
         val token = authHeader.substring(BEARER.length)
         val decoded = itmoJwtVerifier.verifyAndDecode(token)
         val jwtModel = itmoJwtVerifier.parseJWTToModel(decoded)
-        val user = buildUser(jwtModel)
+        val personalityFromMyItmo = myItmoService.getPersonByIsuId(jwtModel.isuId)
+        val user = buildUser(jwtModel, personalityFromMyItmo)
         userService.insert(user)
         val userDetails = userDetailsService.loadUserByUsername(user.studentId)
 
-        val authentication = UsernamePasswordAuthenticationToken(
-            userDetails, null, userDetails.authorities
-        ).apply {
-            details = WebAuthenticationDetailsSource().buildDetails(request)
+        if (SecurityContextHolder.getContext().authentication == null) {
+            val authentication = UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.authorities
+            ).apply {
+                details = WebAuthenticationDetailsSource().buildDetails(request)
+            }
+            SecurityContextHolder.getContext().authentication = authentication
         }
-        SecurityContextHolder.getContext().authentication = authentication
 
         filterChain.doFilter(request, response)
     }
 
-    private fun buildUser(jwtModel: JwtModel): User {
+    private fun buildUser(jwtModel: JwtModel, personality: Personality): User {
+        val webLink = personality.contacts
+            .firstOrNull {
+                it.contactAlias.equals("web")
+            }
+            ?.contact
+            ?.firstOrNull()
         return User(
             id = UUID.randomUUID(),
             studentId = jwtModel.isuId.toString(),
@@ -67,7 +84,7 @@ class JwtAuthFilter(
             lastName = jwtModel.familyName,
             avatarUrl = jwtModel.picture,
             bio = null,
-            socialNetworkUsername = "example"
+            socialNetworkUsername = webLink
         )
     }
 }

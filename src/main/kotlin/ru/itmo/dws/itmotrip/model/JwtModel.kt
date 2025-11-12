@@ -6,5 +6,5 @@ data class JwtModel(
     val givenName: String,
     val middleName: String?,
     val familyName: String,
-    var picture: String
+    var picture: String?,
 )

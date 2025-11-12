@@ -12,7 +12,6 @@ class UserService(
 
     fun insert(user: User) {
         userRepository.insert(
-            user.id,
             user.studentId,
             user.faculty,
             user.firstName,
@@ -26,5 +25,10 @@ class UserService(
 
     fun getByIsuId(isu: String): User? {
         return userRepository.getByIsuId(isu)
+    }
+
+    fun getById(id: UUID): User {
+        return userRepository.getById(id)
+            ?: throw RuntimeException("Не нашли пользователя по id=$id")
     }
 }

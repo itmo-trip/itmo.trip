@@ -97,7 +97,7 @@ val generateApi = tasks.register<GenerateTask>("generateApi", fun GenerateTask.(
     generatorName.set("kotlin-spring")
     inputSpec.set("$rootDir/openapi/itmo-trip-api-v1.openapi.yaml")
     outputDir.set("$buildDir/generated")
-    packageName.set("ru.itmo.dws.itmo.trip.generated")
+    packageName.set("ru.itmo.dws.itmotrip.generated")
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
     validateSpec.set(false)
     configOptions.set(

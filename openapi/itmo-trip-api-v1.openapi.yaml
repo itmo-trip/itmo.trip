@@ -15,6 +15,11 @@ components:
         username: { type: string }
         password: { type: string, format: password }
 
+    RefreshRequest:
+      type: object
+      properties:
+        refreshToken: { type: string }
+
     LoginResponse:
       type: object
       properties:
@@ -23,7 +28,7 @@ components:
         refreshToken: { type: string }
         refreshExpiresIn: { type: integer, format: int64 }
         idToken: { type: string }
-        sessionState: { type: string, format: uuid }
+        sessionState: { type: string }
 
     LocationTypeResponse:
       type: object
@@ -125,6 +130,26 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        401:
+          description: Unauthorized. Please check your credentials
+
+  /api/v1/auth/refresh:
+    post:
+      tags: [ auth ]
+      summary: Refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
       responses:
         200:
           description: Successful operation

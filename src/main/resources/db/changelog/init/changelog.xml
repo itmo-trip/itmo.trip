@@ -289,4 +289,8 @@
         <sql>create index trips_status_idx on trips (status) where status != 'FINISHED'</sql>
         <rollback>drop index trips_status_idx</rollback>
     </changeSet>
+    
+    <changeSet id="add-nullability-for-profile-link" author="a.k.lysenko">
+        <sql>ALTER TABLE users ALTER COLUMN social_network_username DROP NOT NULL</sql>
+    </changeSet>
 </databaseChangeLog>

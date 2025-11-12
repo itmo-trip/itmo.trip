@@ -3,16 +3,16 @@ spring:
     name: itmo-trip
   profiles:
     active: dev, local
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://id.itmo.ru/auth/realms/itmo
   datasource:
     driver-class-name: org.postgresql.Driver
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
+
+id:
+  itmo:
+    jwks-url: https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/certs
+    issuer: https://id.itmo.ru/auth/realms/itmo
 
 server:
   port: 8080

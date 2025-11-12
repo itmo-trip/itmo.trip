@@ -55,6 +55,15 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("dev.alllexey:my-itmo-api:1.4.0")
+
+    implementation("io.jsonwebtoken:jjwt-api:0.13.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
+
+    implementation("com.auth0:java-jwt:4.5.0")
+    implementation("com.auth0:jwks-rsa:0.23.0")
+
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.liquibase:liquibase-core")
 }

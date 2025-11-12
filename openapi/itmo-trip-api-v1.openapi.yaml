@@ -135,9 +135,9 @@ paths:
         401:
           description: Unauthorized. Please check your credentials
 
-  /auth/me:
+  /me:
     get:
-      tags: [ auth ]
+      tags: [ me ]
       summary: Get current user's information
       responses:
         200:

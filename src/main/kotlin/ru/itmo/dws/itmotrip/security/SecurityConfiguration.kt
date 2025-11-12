@@ -16,7 +16,7 @@ class SecurityConfiguration {
     @Bean
     fun filterChain(
         http: HttpSecurity,
-        jwtAuthFilter: JwtAuthFilter
+        jwtAuthFilter: JwtAuthFilter,
     ): SecurityFilterChain {
         http
             .authorizeHttpRequests {

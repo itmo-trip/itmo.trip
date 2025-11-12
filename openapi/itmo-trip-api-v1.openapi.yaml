@@ -267,6 +267,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        403:
+          description: 'Forbidden. You can only update your own profile'
 
   /api/v1/locations:
     get:

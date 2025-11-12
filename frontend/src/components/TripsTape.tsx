@@ -1,18 +1,25 @@
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Filter from "./Filter.tsx";
 import Trip from "./Trip.tsx";
-import {trips} from "../TestData.ts";
+import { trips } from "../TestData.ts";
+import Masonry from '@mui/lab/Masonry';
 
 export default function TripsTape() {
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column', gap: 4, }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <Filter/>
-            <Grid container spacing={2} columns={12}>
-                {trips.map(tr =>
-                    <Trip tripData={tr} />
-                )}
-            </Grid>
+            <Box sx={{ width: '100%' }}>
+                <Masonry
+                    columns={{ xs: 1, md: 2 }}
+                    spacing={2}
+                >
+                    {trips.map((tr, index) => (
+                        <div key={index}>
+                            <Trip tripData={tr} />
+                        </div>
+                    ))}
+                </Masonry>
+            </Box>
         </Box>
     );
 }

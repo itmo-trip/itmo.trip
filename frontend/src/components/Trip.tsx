@@ -4,11 +4,13 @@ import {styled} from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import * as React from "react";
-import {AccessTime, DirectionsCar, LocationOn, Repeat, Telegram } from "@mui/icons-material";
-import {Avatar, Box, Chip, Paper } from "@mui/material";
+import {AccessTime, CalendarToday, DirectionsCar, LocationOn} from "@mui/icons-material";
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import {Box} from "@mui/material";
 import {TripMap} from "./TripMap.tsx";
 import type {ITrip} from "../models/ITrip.ts";
 import type {FC} from "react";
+import {TripAuthor} from "./TripAuthor.tsx";
 
 const StyledCard = styled(Card)(({theme}) => ({
     display: 'flex',
@@ -26,6 +28,21 @@ const StyledCard = styled(Card)(({theme}) => ({
         outlineOffset: '2px',
     },
 }));
+
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+};
+
+const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+};
 
 interface TripProps {
     tripData: ITrip
@@ -46,171 +63,126 @@ const Trip: FC<TripProps> = (props) => {
 
 
     return (
-        <Grid size={{xs: 12, md: 6}}>
-            <StyledCard
-                variant="outlined"
-                onFocus={() => handleFocus(0)}
-                onBlur={handleBlur}
-                tabIndex={0}
-                className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
-                sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.2s ease-in-out',
-                    '&:hover': {
-                        boxShadow: 2,
-                        transform: 'translateY(-2px)'
-                    }
-                }}
-            >
+        <StyledCard
+            variant="outlined"
+            onFocus={() => handleFocus(0)}
+            onBlur={handleBlur}
+            tabIndex={0}
+            className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
+            sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                    boxShadow: 2,
+                    transform: 'translateY(-2px)'
+                }
+            }}
+        >
 
-                {/* Основной контент поездки */}
-                <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                    {/* Заголовок маршрута */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <LocationOn sx={{ color: 'primary.main', mr: 1, fontSize: 20 }} />
-                        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                            {'Площадь восстания'} → {'ИТМО (Кронверский)'}
-                        </Typography>
-                    </Box>
+            {/* Трип */}
+            <CardContent sx={{flexGrow: 1, p: 2, pb: 0, mb: 0}}>
+                {/* Заголовок маршрута */}
+                <Box sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mb: 0.5}}>
+                    <LocationOn sx={{color: 'primary.main', mr: 0.6, fontSize: 20, ml: -0.4}}/>
+                    <Typography variant="h6" sx={{fontWeight: 'bold', lineHeight: 1, mt: 0.3}}>
+                        {'Площадь восстания'} {} → {'ИТМО на Кронверском'}
+                    </Typography>
+                </Box>
 
-                    {/* Карта с маршрутом */}
-                    <Box sx={{ height: 200, position: 'relative' }}>
-                        <TripMap
-                            departureCoords={props.tripData.departure_coords}
-                            arrivalCoords={props.tripData.arrival_coords}
-                            departureAddress='ТЦ Галерея'
-                            arrivalAddress='ИТМО на Кронве'
-                        />
-                    </Box>
-
-                    {/* Время и транспорт */}
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <AccessTime sx={{ color: 'text.secondary', mr: 1, fontSize: 18 }} />
-                            <Typography variant="body2" color="text.secondary">
-                                {new Date(props.tripData.arrival_time).toLocaleTimeString('ru-RU', {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}
+                {/* Дата и время прибытия, вид транспорта */}
+                <Grid container justifyContent={'flex-start'} columnSpacing={2} rowSpacing={-10} alignItems={'center'}>
+                    <Grid container>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            <CalendarToday sx={{color: 'text.secondary', mr: 1, ml: 0.1, mt: -0.1, fontSize: 14}}/>
+                            <Typography variant="body1" fontWeight="medium">
+                                {formatDate(new Date(props.tripData.arrival_time))}
                             </Typography>
                         </Box>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <DirectionsCar sx={{ color: 'text.secondary', mr: 1, fontSize: 18 }} />
-                            <Typography variant="body2" color="text.secondary">
+                    </Grid>
+
+                    <Grid container>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            <AccessTime sx={{color: 'text.secondary', mr: 0.5, fontSize: 18}}/>
+                            <Typography variant="body1" fontWeight="medium">
+                                Прибытие: {formatTime(new Date(props.tripData.arrival_time))}
+                            </Typography>
+                        </Box>
+                    </Grid>
+
+                    <Grid container>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            {props.tripData.transport_type === 'Общественный транспорт' ?
+                                <DirectionsBusIcon
+                                    sx={{color: 'text.secondary', mr: 0.6, mb: 0.2, ml: -0.2, fontSize: 18}}/> :
+                                <DirectionsCar
+                                    sx={{color: 'text.secondary', mr: 0.6, mb: 0.25, ml: -0.2, fontSize: 18}}/>
+                            }
+                            <Typography variant="body1" fontWeight="medium">
                                 {props.tripData.transport_type}
                             </Typography>
                         </Box>
+                    </Grid>
+                </Grid>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Repeat sx={{ color: 'text.secondary', mr: 1, fontSize: 18 }} />
-                            <Typography variant="body2" color="text.secondary">
-                                {props.tripData.trip_frequency}
-                            </Typography>
-                        </Box>
-                    </Box>
-
-                    {/* Комментарий */}
-                    {props.tripData.comment && (
-                        <Paper
-                            variant="outlined"
-                            sx={{
-                                p: 1.5,
-                                mb: 2,
-                                backgroundColor: 'grey.50'
-                            }}
-                        >
-                            <Typography variant="body2" color="text.primary">
-                                {props.tripData.comment}
-                            </Typography>
-                        </Paper>
-                    )}
-                </CardContent>
-
-                {/* Блок автора */}
-                <Box
-                    sx={{
-                        p: 2,
-                        borderTop: 1,
-                        borderColor: 'divider',
-                        backgroundColor: 'background.default'
-                    }}
-                >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        {/* Аватар автора */}
-                        {props.tripData.author.avatar ? (
-                            <Avatar
-                                src={props.tripData.author.avatar}
-                                sx={{
-                                    width: 40,
-                                    height: 40,
-                                    border: 2,
-                                    borderColor: 'background.paper'
-                                }}
-                            />
-                        ) : (
-                            <Avatar
-                                sx={{
-                                    width: 40,
-                                    height: 40,
-                                    bgcolor: 'primary.main',
-                                    border: 2,
-                                    borderColor: 'background.paper'
-                                }}
-                            >
-                                {props.tripData.author.name.charAt(0).toUpperCase()}
-                            </Avatar>
-                        )}
-
-                        {/* Информация об авторе */}
-                        <Box>
-                            <Typography variant="subtitle1" fontWeight="medium">
-                                {props.tripData.author.name}
-                            </Typography>
-                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                                <Chip
-                                    label={`${props.tripData.author.courseNumber} курс`}
-                                    size="small"
-                                    variant="outlined"
-                                />
-                                <Chip
-                                    label={props.tripData.author.facultyName}
-                                    size="small"
-                                    variant="outlined"
-                                />
-                                {props.tripData.author.tg_username && (
-                                    <Chip
-                                        icon={<Telegram />}
-                                        label={`${props.tripData.author.tg_username}`}
-                                        size="small"
-                                        variant="outlined"
-                                        clickable
-                                    />
-                                )}
-                            </Box>
-                        </Box>
-                    </Box>
-
-                    {/* Био автора (если есть) */}
-                    {props.tripData.author.bio && (
-                        <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{
-                                mt: 1,
-                                display: 'block',
-                                fontStyle: 'italic'
-                            }}
-                        >
-                            {props.tripData.author.bio}
-                        </Typography>
-                    )}
+                {/*Карта с маршрутом*/}
+                <Box sx={{height: 150, ml: 0.3, mt: 1}}>
+                    <TripMap
+                        departureCoords={props.tripData.departure_coords}
+                        arrivalCoords={props.tripData.arrival_coords}
+                        tripDateTime={props.tripData.arrival_time}
+                        isDateTimeArrival={false}
+                        isPublicTransport={false}
+                    />
                 </Box>
-            </StyledCard>
-        </Grid>
-        )
+
+                {props.tripData.comment && (
+                    <Box
+                        sx={{
+                            mt: 1.5,
+                            p: 1.5,
+                            backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                            borderRadius: 1.5,
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            position: 'relative',
+                            display: 'table',
+                            maxWidth: '100%',
+                            textAlign: 'left',
+                            mx: 0,
+                            alignSelf: 'flex-start',
+                            '&::before': {
+                                content: '""',
+                                position: 'absolute',
+                                left: -1,
+                                top: 8,
+                                bottom: 8,
+                                width: 3,
+                                backgroundColor: '#11d6b0',
+                                borderRadius: 1.5,
+                            }
+                        }}
+                    >
+                        <Typography
+                            variant="body2"
+                            color="text.primary"
+                            sx={{
+                                fontStyle: 'italic',
+                                lineHeight: 0.8,
+                                textAlign: 'left'
+                            }}
+                        >
+                            {props.tripData.comment}
+                        </Typography>
+                    </Box>
+                )}
+            </CardContent>
+
+            <TripAuthor author={props.tripData.author}/>
+        </StyledCard>
+    )
 }
 
 export default Trip

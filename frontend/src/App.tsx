@@ -37,7 +37,6 @@ function App() {
                     }}
                 >
                     <TripsTape/>
-                    {/* заглушка для форматирования, когда мало объявлений <Latest/>*/}
                 </Container>
             </AppTheme>
         </>

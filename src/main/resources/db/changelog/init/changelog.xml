@@ -156,26 +156,11 @@
     </changeSet>
 
     <changeSet id="init-populate-locations-table" author="quicklybly">
-        <sql>
-            insert into locations (creator_id, location_type_id, name, latitude, longitude) values
-            (
-            null,
-            (select id from location_types where code = 'UNIVERSITY_CAMPUS'),
-            'Кронверский',
-            59.95710021974228,
-            30.30825110096854
-            ),
-            (
-            null,
-            (select id from location_types where code = 'UNIVERSITY_CAMPUS'),
-            'Ломоносова',
-            59.92746564931244,
-            30.337998211872815
-            );
-        </sql>
-        <rollback>
-            delete from locations where name in ('Кронверский', 'Ломоносова');
-        </rollback>
+        <loadData
+                tableName="locations"
+                file="locations.csv"
+                relativeToChangelogFile="true"
+        />
     </changeSet>
 
     <changeSet id="init-create-trip-status-enum" author="quicklybly">

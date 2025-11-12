@@ -3,18 +3,37 @@ import AppTheme from './theme/AppTheme';
 import TripsTape from './components/TripsTape.tsx';
 import {Container, CssBaseline} from "@mui/material";
 import AppAppBar from "./components/AppAppBar.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {AuthForm} from "./components/AuthForm.tsx";
 import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
+import {getUserProfile} from "./api/authApi.ts";
 
+function checkAuthFromStorage(): boolean {
+    const idToken = localStorage.getItem("idToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    return !!idToken && !!refreshToken;
+}
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
+    const [user, setUser] = useState<{ studentId?: string } | null>(null);
 
-    const handleLoginSuccess = () => {
+    useEffect(() => {
+        if (checkAuthFromStorage()) {
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    const handleLoginSuccess = async () => {
         setIsAuthenticated(true);
-        setToastMessage("Вы успешно вошли в систему!");
+        try {
+            const profile = await getUserProfile();
+            setUser({studentId: profile.studentId});
+            console.log("Успех нереальный");
+        } catch (err) {
+            console.error("Не удалось загрузить профиль после логина", err);
+        }
     };
 
     return (
@@ -27,7 +46,14 @@ function App() {
 
             <AppTheme>
                 <CssBaseline enableColorScheme/>
-                <AppAppBar/>
+                <AppAppBar
+                    // @ts-ignore
+                    user={user}
+                    onLogout={() => {
+                        setIsAuthenticated(false)
+                        setUser(null)
+                    }}
+                />
                 <Container
                     sx={{
                         display: 'flex',

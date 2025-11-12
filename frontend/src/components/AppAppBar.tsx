@@ -1,11 +1,11 @@
 import { alpha, styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import ColorModeIconDropdown from '.././theme/ColorModeIconDropdown';
 import Sitemark from './ItmoTripIcon.tsx';
+import {Box, Button, InputBase } from "@mui/material";
+import {logout} from "../api/authApi.ts";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: 'flex',
@@ -23,12 +23,17 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     padding: '8px 12px',
 }));
 
-export default function AppAppBar() {
+export default function AppAppBar({ user, onLogout }: { user?: { studentId?: string }, onLogout?: () => void }) {
     // const [open, setOpen] = React.useState(false);
     //
     // const toggleDrawer = (newOpen: boolean) => () => {
     //     setOpen(newOpen);
     // };
+
+    const handleLogout = () => {
+        logout();
+        if (onLogout) onLogout();
+    };
 
     return (
         <AppBar
@@ -43,7 +48,7 @@ export default function AppAppBar() {
         >
             <Container maxWidth="lg">
                 <StyledToolbar variant="dense" disableGutters>
-                    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', px: 0 }}>
                         <Sitemark />
                         <Box>
                             <Button variant="text" color="info" size="small">
@@ -51,15 +56,27 @@ export default function AppAppBar() {
                             </Button>
                         </Box>
                     </Box>
-                    <Box
-                        sx={{
-                            gap: 1,
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Button color="primary" variant="text" size="small">
+                    <Box sx={{ gap: 1, display: 'flex', alignItems: 'center' }}>
+
+                        {user?.studentId && (
+                            <InputBase
+                                value={`student-id: ${user.studentId}`}
+                                readOnly
+                                sx={{
+                                    borderRadius: 1,
+                                    px: 1,
+                                    py: 0.5,
+                                    fontSize: 14,
+                                    width: "auto",
+                                    textAlign: "center",
+                                }}
+                            />
+                        )}
+
+                        <Button color="primary" variant="text" size="small" onClick={handleLogout}>
                             Выйти
                         </Button>
+
                         <ColorModeIconDropdown />
                     </Box>
 

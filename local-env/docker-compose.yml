@@ -49,15 +49,17 @@ services:
     build:
       context: .././frontend
       dockerfile: Dockerfile
+#      platforms:
+#        - "linux/amd64"
       args:
-        - VITE_API_BASE=${VITE_API_BASE}
-        - VITE_API_TARGET=${VITE_API_TARGET}
+        - VITE_API_BASE=http://trips.itmo.tw1.su:8080/itmo-trip/api/v1
+        - VITE_API_TARGET=http://trips.itmo.tw1.su:8080
     container_name: itmo-trip-frontend
     environment:
       VITE_API_BASE: ${VITE_API_BASE}
       VITE_API_TARGET: ${VITE_API_TARGET}
     ports:
-      - "5177:5177"
+      - "5177:80"
     depends_on:
       backend:
         condition: service_healthy

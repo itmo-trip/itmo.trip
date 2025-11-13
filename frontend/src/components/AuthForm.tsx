@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@mui/material";
 import { login, getUserProfile } from "../api/CustomAuthService.ts";
-import {API_BASE_AVOID_CORS} from "../api/OpenAPI.custom.ts";
+import {API_BASE} from "../api/OpenAPI.custom.ts";
 
 interface AuthFormProps {
     onSuccess: () => void;
@@ -66,7 +66,7 @@ export function AuthForm({ onSuccess, onProfileComplete }: AuthFormProps) {
 
         try {
             // PATCH user with BIO and SOCIAL_NETWORK_USER_NAME
-            const res = await fetch(`${API_BASE_AVOID_CORS}/api/v1/users/${userUuid}`, {
+            const res = await fetch(`${API_BASE}/users/${userUuid}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

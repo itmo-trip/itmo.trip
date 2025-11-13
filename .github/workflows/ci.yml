@@ -84,8 +84,8 @@ jobs:
   build-docker-image-front:
     runs-on: ubuntu-latest
     env:
-      VITE_API_BASE: http://backend:8080/itmo-trip/api/v1
-      VITE_API_TARGET: http://backend:8080
+      VITE_API_BASE: http://trips.itmo.tw1.su:8080/itmo-trip/api/v1
+      VITE_API_TARGET: http://trips.itmo.tw1.su:8080
     permissions:
       contents: read
       packages: write

@@ -4,16 +4,17 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN rm -rf node_modules package-lock.json && npm install
+RUN rm -rf node_modules package-lock.json && \
+    npm install --force
 
 COPY . .
 
-FROM node:22-bullseye
+RUN npm run build
 
-WORKDIR /app
+FROM nginx:alpine
 
-COPY --from=builder /app /app
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-EXPOSE 5177
+EXPOSE 80
 
-CMD ["npm", "run", "dev"]
+CMD ["nginx", "-g", "daemon off;"]

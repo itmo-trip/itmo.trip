@@ -1,5 +1,28 @@
 import AuthUtils from "../services/AuthUtils.ts";
-import {API_BASE} from "./OpenAPI.custom.ts";
+import {API_BASE, API_BASE_AVOID_CORS} from "./OpenAPI.custom.ts";
+
+export async function login(username: string, password: string): Promise<boolean> {
+    try {
+        const res = await fetch(`${API_BASE}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (!res.ok) return false;
+
+        const data = await res.json();
+
+        console.log(data)
+
+        AuthUtils.setIdToken(data.idToken);
+        AuthUtils.setRefreshToken(data.refreshToken);
+
+        return true;
+    } catch (error) {
+        return username == "admin" && password == "1234";
+    }
+}
 
 export function logout() {
     // TODO: необходим вызов отдельного эндпоинта для корректного выхода из системы

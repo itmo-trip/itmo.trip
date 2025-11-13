@@ -10,7 +10,6 @@ import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
 import {Modal, Box} from '@mui/material';
 import {MeService} from "./api/generated";
 import MyTripsTape from "./components/MyTripsTape.tsx";
-import {AppBarProvider} from "./AppBarContext.tsx";
 
 function checkAuthFromStorage(): boolean {
     const idToken = localStorage.getItem('idToken');

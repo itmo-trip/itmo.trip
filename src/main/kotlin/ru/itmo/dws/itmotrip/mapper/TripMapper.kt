@@ -26,7 +26,7 @@ fun Trip.toTripResponse(
     comment = comment,
     transportType = transportType,
     arrivalLocation = arrivalLocation,
-    departureLocation = departureLocation,
+    departureLocation = departureLocation
 )
 
 fun TripRequest.toTrip(
@@ -43,5 +43,5 @@ fun TripRequest.toTrip(
     departureLocationId = departureLocationId,
     arrivalLocationId = arrivalLocationId,
     status = status,
-    comment = comment,
+    comment = comment
 )

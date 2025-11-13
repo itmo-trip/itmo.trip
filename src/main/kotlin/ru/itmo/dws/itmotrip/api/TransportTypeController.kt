@@ -8,6 +8,7 @@ import ru.itmo.dws.itmotrip.service.TransportTypeService
 
 @Component
 class TransportTypeController(private val transportTypeService: TransportTypeService) : TransportTypesApiDelegate {
+
     override fun apiV1TransportTypesGet(): ResponseEntity<List<TransportTypeResponse>> {
         val transportTypes = transportTypeService.getAll()
         return ResponseEntity.ok(transportTypes)

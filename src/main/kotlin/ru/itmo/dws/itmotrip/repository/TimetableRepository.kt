@@ -7,6 +7,7 @@ import ru.itmo.dws.itmotrip.model.Timetable
 
 @Repository
 interface TimetableRepository : CrudRepository<Timetable, Long> {
+
     @Query("SELECT * FROM timetable")
     fun getAll(): List<Timetable>
 }

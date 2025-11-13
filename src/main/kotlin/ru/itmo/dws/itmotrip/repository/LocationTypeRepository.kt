@@ -7,6 +7,7 @@ import ru.itmo.dws.itmotrip.model.LocationType
 
 @Repository
 interface LocationTypeRepository : CrudRepository<LocationType, Long> {
+
     @Query("SELECT * FROM location_types")
     fun getAll(): List<LocationType>
 

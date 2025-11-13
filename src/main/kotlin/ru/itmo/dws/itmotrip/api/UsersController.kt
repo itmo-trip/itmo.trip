@@ -26,7 +26,7 @@ class UsersController(private val userService: UserService) : UsersApiDelegate, 
 
     override fun apiV1UsersIdGet(id: UUID): ResponseEntity<UserResponse> {
         val user = userService.getById(id)
-        return ResponseEntity.ok(user.toUserResponse())
+        return ResponseEntity.ok(user)
     }
 
     override fun apiV1UsersIdPatch(id: UUID, userRequest: UserRequest): ResponseEntity<UserResponse> {

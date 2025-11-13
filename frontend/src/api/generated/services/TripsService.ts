@@ -35,7 +35,7 @@ export class TripsService {
         departureTime?: string,
         arrivalLocationId?: string,
         departureLocationId?: string,
-        transportTypeId?: number,
+        transportTypeId?: string,
     ): CancelablePromise<Array<TripResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -66,6 +66,9 @@ export class TripsService {
             url: '/api/v1/trips',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                400: `Invalid trip data`,
+            },
         });
     }
     /**

@@ -23,6 +23,7 @@ class SecurityConfiguration {
                 it.requestMatchers("/readyz").permitAll()
                 it.requestMatchers("/api/v1/auth/*").permitAll()
                 it.requestMatchers(HttpMethod.GET).permitAll()
+                it.requestMatchers(HttpMethod.OPTIONS).permitAll()
 
                 it.anyRequest().authenticated()
             }

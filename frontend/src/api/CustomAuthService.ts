@@ -1,5 +1,5 @@
 import AuthUtils from "../services/AuthUtils.ts";
-import {API_BASE, API_BASE_AVOID_CORS} from "./OpenAPI.custom.ts";
+import {API_BASE} from "./OpenAPI.custom.ts";
 
 export async function login(username: string, password: string): Promise<boolean> {
     try {

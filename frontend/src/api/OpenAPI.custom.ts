@@ -3,7 +3,6 @@
 import type { ApiRequestOptions } from './generated/core/ApiRequestOptions';
 
 export const API_BASE = import.meta.env.VITE_API_BASE;
-export const API_BASE_AVOID_CORS = "/itmo-trip" // смотреть в vite.config.ts
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 type Headers = Record<string, string>;
@@ -21,7 +20,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-    BASE: API_BASE_AVOID_CORS,
+    BASE: API_BASE,
     VERSION: '1.0.0',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',

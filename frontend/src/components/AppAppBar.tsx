@@ -7,7 +7,6 @@ import Sitemark from './ItmoTripIcon.tsx';
 import {Box, Button, InputBase} from "@mui/material";
 import {logout} from "../api/CustomAuthService.ts";
 import {Link} from "react-router-dom";
-import type {FC} from "react";
 import {useAppBarAction} from "../AppBarContext.tsx";
 
 const StyledToolbar = styled(Toolbar)(({theme}) => ({
@@ -26,12 +25,7 @@ const StyledToolbar = styled(Toolbar)(({theme}) => ({
     padding: '8px 12px',
 }));
 
-interface AppBarProps {
-    user?: { studentId?: string },
-    onLogout: () => void;
-}
-
-export const AppAppBar: FC<AppBarProps> = (props: AppBarProps) => {
+export default function AppAppBar({ user, onLogout }: { user?: { studentId?: string }, onLogout?: () => void }) {
     // const [open, setOpen] = React.useState(false);
     //
     // const toggleDrawer = (newOpen: boolean) => () => {
@@ -42,8 +36,10 @@ export const AppAppBar: FC<AppBarProps> = (props: AppBarProps) => {
 
     const handleLogout = () => {
         logout();
-        if (props.onLogout) props.onLogout();
+        if (onLogout) onLogout();
     };
+
+    console.log(user)
 
     return (
         <AppBar
@@ -71,9 +67,9 @@ export const AppAppBar: FC<AppBarProps> = (props: AppBarProps) => {
                     </Box>
                     <Box sx={{gap: 1, display: 'flex', alignItems: 'center'}}>
 
-                        {props.user?.studentId && (
+                        {user?.studentId && (
                             <InputBase
-                                value={`${props.user.studentId}`}
+                                value={`${user.studentId}`}
                                 readOnly
                                 sx={{
                                     borderRadius: 1,
@@ -94,7 +90,7 @@ export const AppAppBar: FC<AppBarProps> = (props: AppBarProps) => {
                     </Box>
 
                     {/*Меню, если появится больше элементов*/}
-{/*
+                    {/*
                     <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
                         <ColorModeIconDropdown size="medium" />
                         <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>

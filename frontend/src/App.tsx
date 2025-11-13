@@ -3,7 +3,7 @@ import './App.css'
 import AppTheme from './theme/AppTheme';
 import TripsTape from './components/TripsTape.tsx';
 import {Container, CssBaseline} from "@mui/material";
-import {AppAppBar} from "./components/AppAppBar.tsx";
+import AppAppBar from "./components/AppAppBar.tsx";
 import {useEffect, useState} from "react";
 import {AuthForm} from "./components/AuthForm.tsx";
 import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
@@ -32,9 +32,10 @@ function App() {
     }, []);
 
     const handleLoginSuccess = async () => {
-        setIsAuthenticated(true);
         try {
             const profile = await MeService.getApiV1Me();
+
+            setUser({studentId: `${profile.first_name} ${profile.last_name} (${profile.student_id})`});
 
             const isComplete =
                 !!profile.bio && !!profile.social_network_username;
@@ -52,6 +53,7 @@ function App() {
             console.error('Не удалось загрузить профиль после логина', err);
             setIsAuthenticated(false);
         }
+        setIsAuthenticated(true);
     };
 
     // Когда пользователь дозаполнил профиль — вызывается этот коллбэк

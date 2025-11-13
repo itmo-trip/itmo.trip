@@ -13,12 +13,11 @@ export async function login(username: string, password: string): Promise<boolean
 
         const data = await res.json();
 
-        console.log(data)
-
-        AuthUtils.setIdToken(data.idToken);
-        AuthUtils.setRefreshToken(data.refreshToken);
+        AuthUtils.setIdToken(data.id_token);
+        AuthUtils.setRefreshToken(data.refresh_token);
 
         return true;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return username == "admin" && password == "1234";
     }
@@ -48,8 +47,8 @@ export async function refreshTokens(): Promise<boolean> {
 
         const data = await res.json();
 
-        AuthUtils.setIdToken(data.idToken);
-        AuthUtils.setRefreshToken(data.refreshToken);
+        AuthUtils.setIdToken(data.id_token);
+        AuthUtils.setRefreshToken(data.refresh_token);
 
         console.log("🔄 Токены обновлены");
         return true;
@@ -67,17 +66,12 @@ export async function apiFetch(
     const idToken = AuthUtils.getIdToken();
     const refreshToken = AuthUtils.getRefreshToken();
 
-    console.log(AuthUtils.getIdToken())
-    console.log(AuthUtils.getRefreshToken())
-
     const headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${idToken}`,
         "Refresh": refreshToken || "",
         ...options.headers,
     };
-
-    console.log(API_BASE)
 
     let res = await fetch(`${API_BASE_AVOID_CORS}${path}`, { ...options, headers });
 

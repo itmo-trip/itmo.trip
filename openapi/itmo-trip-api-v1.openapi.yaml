@@ -194,12 +194,13 @@ paths:
     post:
       tags: [ auth ]
       summary: Refresh token
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshRequest'
+      parameters:
+        - name: Refresh
+          in: header
+          description: Refresh token
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Successful operation

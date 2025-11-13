@@ -20,9 +20,9 @@ class AuthController(private val authHelper: AuthHelper) : AuthApiDelegate {
         return ResponseEntity.ok(authResponse.toLoginResponse())
     }
 
-    override fun apiV1AuthRefreshPost(refreshRequest: RefreshRequest): ResponseEntity<LoginResponse> {
+    override fun apiV1AuthRefreshPost(refresh: String): ResponseEntity<LoginResponse> {
         val authResponse = runCatching {
-            authHelper.refreshTokens(refreshRequest.refreshToken)
+            authHelper.refreshTokens(refresh)
         }.getOrElse { throw UnauthorizedException("failed to refresh", it) }
         return ResponseEntity.ok(authResponse.toLoginResponse())
     }

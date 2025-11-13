@@ -12,13 +12,6 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       allowedHosts: true,
       port: 5177,
-      proxy: {
-        '/itmo-trip': {
-          target: target,
-          changeOrigin: true,
-          secure: false,
-        },
-      },
     },
   };
 });

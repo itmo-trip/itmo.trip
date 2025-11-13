@@ -73,7 +73,7 @@ export async function apiFetch(
         ...options.headers,
     };
 
-    let res = await fetch(`${API_BASE_AVOID_CORS}${path}`, { ...options, headers });
+    let res = await fetch(`${API_BASE}${path}`, { ...options, headers });
 
     if (res.status === 401 && refreshToken) {
         const refreshed = await refreshTokens();
@@ -92,7 +92,7 @@ export async function apiFetch(
 }
 
 export async function getUserProfile() {
-    const res = await apiFetch("/api/v1/me");
+    const res = await apiFetch("/me");
     if (!res.ok) throw new Error("Не удалось получить профиль");
     return res.json();
 }

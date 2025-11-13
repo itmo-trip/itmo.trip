@@ -47,6 +47,9 @@ export class UsersService {
             },
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                403: `Forbidden. You can only update your own profile`,
+            },
         });
     }
 }

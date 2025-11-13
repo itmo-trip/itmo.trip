@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type LocationTypeResponse = {
-    id?: number;
-    code?: string;
+    id: number;
+    code: string;
 };
 

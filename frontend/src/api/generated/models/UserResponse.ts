@@ -3,14 +3,14 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UserResponse = {
-    id?: string;
-    avatar_url?: string | null;
-    bio?: string | null;
-    faculty?: string;
-    first_name?: string;
-    last_name?: string;
-    middle_name?: string | null;
+    id: string;
+    avatar_url?: string;
+    bio?: string;
+    faculty: string;
+    first_name: string;
+    last_name: string;
+    middle_name?: string;
     social_network_username?: string;
-    student_id?: string;
+    student_id: string;
 };
 

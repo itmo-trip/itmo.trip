@@ -5,11 +5,11 @@
 import type { LocationTypeResponse } from './LocationTypeResponse';
 import type { UserResponse } from './UserResponse';
 export type LocationResponse = {
-    id?: string;
+    id: string;
     creator?: UserResponse;
-    latitude?: number;
-    location_type?: LocationTypeResponse;
-    longitude?: number;
-    name?: string;
+    latitude: number;
+    location_type: LocationTypeResponse;
+    longitude: number;
+    name: string;
 };
 

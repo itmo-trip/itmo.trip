@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type LocationRequest = {
-    latitude?: number;
-    location_type_id?: number;
-    longitude?: number;
-    name?: string;
+    latitude: number;
+    location_type_id: number;
+    longitude: number;
+    name: string;
 };
 

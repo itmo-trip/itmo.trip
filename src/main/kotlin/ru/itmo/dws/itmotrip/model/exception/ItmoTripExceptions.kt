@@ -33,3 +33,6 @@ open class NotFoundException(
 
 class UserNotFoundException(id: UUID) : NotFoundException("User", id.toString())
 class TripNotFoundException(id: UUID) : NotFoundException("Trip", id.toString())
+class LocationNotFoundException(id: UUID) : NotFoundException("Location", id.toString())
+class LocationTypeNotFoundException(id: Long) : NotFoundException("Location type", id.toString())
+class TransportTypeNotFoundException(id: Long) : NotFoundException("Transport type", id.toString())

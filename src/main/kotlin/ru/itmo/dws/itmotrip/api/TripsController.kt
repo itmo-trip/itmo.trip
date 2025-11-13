@@ -15,11 +15,18 @@ class TripsController(private val tripsService: TripService) : TripsApiDelegate 
     override fun apiV1TripsGet(
         arrivalTime: String?,
         departureTime: String?,
-        arrivalLocationId: UUID?,
-        departureLocationId: UUID?,
-        transportTypeId: Long?
+        arrivalLocationId: String?,
+        departureLocationId: String?,
+        transportTypeId: String?,
     ): ResponseEntity<List<TripResponse>> {
-        return super.apiV1TripsGet(arrivalTime, departureTime, arrivalLocationId, departureLocationId, transportTypeId)
+        val trips = tripsService.getAllFiltering(
+            arrivalTime,
+            departureTime,
+            arrivalLocationId,
+            departureLocationId,
+            transportTypeId,
+        )
+        return ResponseEntity.ok(trips)
     }
 
     override fun apiV1TripsIdDelete(id: UUID): ResponseEntity<Unit> {
@@ -33,7 +40,9 @@ class TripsController(private val tripsService: TripService) : TripsApiDelegate 
     }
 
     override fun apiV1TripsIdPut(id: UUID, tripRequest: TripRequest): ResponseEntity<TripResponse> {
-        return super.apiV1TripsIdPut(id, tripRequest)
+        val user = getCurrentUserFromSecurityContext()
+        val trip = tripsService.updateTrip(id, tripRequest, user)
+        return ResponseEntity.ok(trip)
     }
 
     override fun apiV1TripsPost(tripRequest: TripRequest): ResponseEntity<TripResponse> {

@@ -3,6 +3,8 @@ package ru.itmo.dws.itmotrip.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.itmo.dws.itmotrip.generated.models.UserRequest
+import ru.itmo.dws.itmotrip.generated.models.UserResponse
+import ru.itmo.dws.itmotrip.mapper.toUserResponse
 import ru.itmo.dws.itmotrip.model.User
 import ru.itmo.dws.itmotrip.model.exception.UserNotFoundException
 import ru.itmo.dws.itmotrip.repository.UserRepository
@@ -19,8 +21,9 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    fun getById(id: UUID): User {
-        return userRepository.getById(id) ?: throw UserNotFoundException(id)
+    fun getById(id: UUID): UserResponse {
+        val user = userRepository.getById(id) ?: throw UserNotFoundException(id)
+        return user.toUserResponse()
     }
 
     @Transactional

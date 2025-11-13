@@ -3,8 +3,6 @@ import {API_BASE, API_BASE_AVOID_CORS} from "./OpenAPI.custom.ts";
 
 export async function login(username: string, password: string): Promise<boolean> {
     try {
-        console.log(API_BASE)
-
         const res = await fetch(`${API_BASE}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -14,7 +12,6 @@ export async function login(username: string, password: string): Promise<boolean
         if (!res.ok) return false;
 
         const data = await res.json();
-        console.log(data)
 
         AuthUtils.setIdToken(data.id_token);
         AuthUtils.setRefreshToken(data.refresh_token);
@@ -68,17 +65,12 @@ export async function apiFetch(
     const idToken = AuthUtils.getIdToken();
     const refreshToken = AuthUtils.getRefreshToken();
 
-    console.log(AuthUtils.getIdToken())
-    console.log(AuthUtils.getRefreshToken())
-
     const headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${idToken}`,
         "Refresh": refreshToken || "",
         ...options.headers,
     };
-
-    console.log(API_BASE)
 
     let res = await fetch(`${API_BASE_AVOID_CORS}${path}`, { ...options, headers });
 

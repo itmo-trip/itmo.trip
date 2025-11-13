@@ -49,6 +49,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_API_BASE=${VITE_API_BASE}
+        - VITE_API_TARGET=${VITE_API_TARGET}
     container_name: itmo-trip-frontend
     ports:
       - "5177:5177"

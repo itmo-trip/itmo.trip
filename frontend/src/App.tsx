@@ -1,45 +1,66 @@
-import './App.css'
+import './App.css';
 import AppTheme from './theme/AppTheme';
 import TripsTape from './components/TripsTape.tsx';
-import {Container, CssBaseline} from "@mui/material";
-import AppAppBar from "./components/AppAppBar.tsx";
-import {useEffect, useState} from "react";
-import {AuthForm} from "./components/AuthForm.tsx";
-import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
-import {getUserProfile} from "./api/CustomAuthService.ts";
-import { Modal, Box } from '@mui/material';
+import { Container, CssBaseline, Modal, Box } from '@mui/material';
+import AppAppBar from './components/AppAppBar.tsx';
+import { useEffect, useState } from 'react';
+import { AuthForm } from './components/AuthForm.tsx';
+import { SuccessLoginToast } from './components/SuccessLoginToast.tsx';
+import { getUserProfile } from './api/CustomAuthService.ts';
 
 function checkAuthFromStorage(): boolean {
-    const idToken = localStorage.getItem("idToken");
-    const refreshToken = localStorage.getItem("refreshToken");
+    const idToken = localStorage.getItem('idToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     return !!idToken && !!refreshToken;
 }
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [toastMessage, setToastMessage] = useState("");
+    const [, setIsProfileComplete] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
     const [user, setUser] = useState<{ studentId?: string } | null>(null);
 
     useEffect(() => {
-        handleLoginSuccess()
+        // Проверяем токены при запуске
+        console.log("here 1");
         if (checkAuthFromStorage()) {
-            setIsAuthenticated(true);
+            handleLoginSuccess();
         }
     }, []);
 
     const handleLoginSuccess = async () => {
-        setIsAuthenticated(true);
         try {
-            // Пока ждём переезда методов авторизации на бэке
+            console.log("here 222222");
             const profile = await getUserProfile();
-            // Ждём переезда методов авторизации на бэке
-            //const profile = await MeService.getApiV1Me();
 
-            setUser({studentId: `${profile.first_name} ${profile.last_name} (${profile.student_id})`});
-            console.log("Успех нереальный");
+            console.log("here 3123");
+            setUser({
+                studentId: `${profile.first_name} ${profile.last_name} (${profile.student_id})`,
+            });
+
+            const isComplete =
+                !!profile.bio && !!profile.social_network_username;
+
+            if (isComplete) {
+                setIsAuthenticated(true);
+                setIsProfileComplete(true);
+                console.log(profile);
+                setToastMessage('Успешный вход!');
+            } else {
+                setIsAuthenticated(false);
+                setIsProfileComplete(false);
+            }
         } catch (err) {
-            console.error("Не удалось загрузить профиль после логина", err);
+            console.error('Не удалось загрузить профиль после логина', err);
+            setIsAuthenticated(false);
         }
+    };
+
+    // Когда пользователь дозаполнил профиль — вызывается этот коллбэк
+    const handleProfileCompleted = () => {
+        setIsAuthenticated(true);
+        setIsProfileComplete(true);
+        setToastMessage('Профиль успешно дополнен!');
     };
 
     return (
@@ -58,22 +79,25 @@ function App() {
             >
                 <Box
                     sx={{
-                        bgcolor: 'background.paper',
+                        bgcolor: 'background.grey',
                         boxShadow: 24,
-                        borderRadius: 2,
+                        borderRadius: 10,
                         p: 4,
                         minWidth: 360,
                         maxWidth: '90%',
                     }}
                 >
-                    <AuthForm onSuccess={handleLoginSuccess} />
+                    <AuthForm
+                        onSuccess={handleLoginSuccess}
+                        onProfileComplete={handleProfileCompleted}
+                    />
                 </Box>
             </Modal>
 
             {toastMessage && (
                 <SuccessLoginToast
                     message={toastMessage}
-                    onClose={() => setToastMessage("")}
+                    onClose={() => setToastMessage('')}
                 />
             )}
 
@@ -84,6 +108,7 @@ function App() {
                     user={user}
                     onLogout={() => {
                         setIsAuthenticated(false);
+                        setIsProfileComplete(false);
                         setUser(null);
                     }}
                 />
@@ -102,4 +127,4 @@ function App() {
     );
 }
 
-export default App
+export default App;

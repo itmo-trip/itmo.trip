@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: '0.0.0.0',
+      allowedHosts: true,
       port: 5177,
       proxy: {
         '/itmo-trip': {

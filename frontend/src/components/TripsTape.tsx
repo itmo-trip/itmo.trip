@@ -5,6 +5,15 @@ import { trips } from "../TestData.ts";
 import Masonry from '@mui/lab/Masonry';
 
 export default function TripsTape() {
+
+    // useEffect(() => {
+    //     getTrips()
+    // }, [])
+    //
+    // const getTrips = async () => {
+    //     const trips = await TripsService.getApiV1Trips();
+    // }
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <Filter/>

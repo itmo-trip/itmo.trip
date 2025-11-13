@@ -66,7 +66,7 @@ export function AuthForm({onSuccess}: AuthFormProps) {
                 }}
             >
                 <Typography variant="h5" align="center">
-                    ITMO.TRIP ID
+                    ITMO ID
                 </Typography>
 
                 <TextField

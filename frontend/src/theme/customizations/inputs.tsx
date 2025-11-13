@@ -16,14 +16,13 @@ export const inputsCustomizations: Components<Theme> = {
             disableRipple: true,
         },
         styleOverrides: {
-            root: ({ theme }) => ({
+            root: {
                 boxSizing: 'border-box',
                 transition: 'all 100ms ease-in',
                 '&:focus-visible': {
-                    outline: `3px solid ${alpha(theme.palette.primary.main, 0.5)}`,
-                    outlineOffset: '2px',
+                    outline: 'none',
                 },
-            }),
+            },
         },
     },
     MuiButton: {
@@ -32,6 +31,14 @@ export const inputsCustomizations: Components<Theme> = {
                 boxShadow: 'none',
                 borderRadius: (theme.vars || theme).shape.borderRadius,
                 textTransform: 'none',
+                '&:focus': {
+                    outline: 'none',
+                    boxShadow: 'none',
+                },
+                '&:focus-visible': {
+                    outline: 'none',
+                    boxShadow: 'none',
+                },
                 variants: [
                     {
                         props: {
@@ -68,6 +75,8 @@ export const inputsCustomizations: Components<Theme> = {
                             },
                             '&:active': {
                                 backgroundColor: gray[800],
+                                outline: 'none',
+                                boxShadow: 'none',
                             },
                             ...theme.applyStyles('dark', {
                                 color: 'black',
@@ -82,6 +91,8 @@ export const inputsCustomizations: Components<Theme> = {
                                 },
                                 '&:active': {
                                     backgroundColor: gray[400],
+                                    outline: 'none',
+                                    boxShadow: 'none',
                                 },
                             }),
                         },
@@ -104,6 +115,8 @@ export const inputsCustomizations: Components<Theme> = {
                             '&:active': {
                                 backgroundColor: brand[700],
                                 backgroundImage: 'none',
+                                outline: 'none',
+                                boxShadow: 'none',
                             },
                         },
                     },
@@ -122,6 +135,8 @@ export const inputsCustomizations: Components<Theme> = {
                             },
                             '&:active': {
                                 backgroundColor: gray[200],
+                                outline: 'none',
+                                boxShadow: 'none',
                             },
                             ...theme.applyStyles('dark', {
                                 backgroundColor: gray[800],
@@ -133,6 +148,8 @@ export const inputsCustomizations: Components<Theme> = {
                                 },
                                 '&:active': {
                                     backgroundColor: gray[900],
+                                    outline: 'none',
+                                    boxShadow: 'none',
                                 },
                             }),
                         },
@@ -153,6 +170,8 @@ export const inputsCustomizations: Components<Theme> = {
                             },
                             '&:active': {
                                 backgroundColor: alpha(brand[200], 0.7),
+                                outline: 'none',
+                                boxShadow: 'none',
                             },
                             ...theme.applyStyles('dark', {
                                 color: brand[50],
@@ -165,6 +184,8 @@ export const inputsCustomizations: Components<Theme> = {
                                 },
                                 '&:active': {
                                     backgroundColor: alpha(brand[900], 0.5),
+                                    outline: 'none',
+                                    boxShadow: 'none',
                                 },
                             }),
                         },
@@ -180,6 +201,8 @@ export const inputsCustomizations: Components<Theme> = {
                             },
                             '&:active': {
                                 backgroundColor: gray[200],
+                                outline: 'none',
+                                boxShadow: 'none',
                             },
                             ...theme.applyStyles('dark', {
                                 color: gray[50],
@@ -188,6 +211,8 @@ export const inputsCustomizations: Components<Theme> = {
                                 },
                                 '&:active': {
                                     backgroundColor: alpha(gray[700], 0.7),
+                                    outline: 'none',
+                                    boxShadow: 'none',
                                 },
                             }),
                         },
@@ -204,6 +229,8 @@ export const inputsCustomizations: Components<Theme> = {
                             },
                             '&:active': {
                                 backgroundColor: alpha(brand[200], 0.7),
+                                outline: 'none',
+                                boxShadow: 'none',
                             },
                             ...theme.applyStyles('dark', {
                                 color: brand[100],
@@ -212,6 +239,8 @@ export const inputsCustomizations: Components<Theme> = {
                                 },
                                 '&:active': {
                                     backgroundColor: alpha(brand[900], 0.3),
+                                    outline: 'none',
+                                    boxShadow: 'none',
                                 },
                             }),
                         },
@@ -232,12 +261,22 @@ export const inputsCustomizations: Components<Theme> = {
                 border: '1px solid ',
                 borderColor: gray[200],
                 backgroundColor: alpha(gray[50], 0.3),
+                '&:focus': {
+                    outline: 'none',
+                    boxShadow: 'none',
+                },
+                '&:focus-visible': {
+                    outline: 'none',
+                    boxShadow: 'none',
+                },
                 '&:hover': {
                     backgroundColor: gray[100],
                     borderColor: gray[300],
                 },
                 '&:active': {
                     backgroundColor: gray[200],
+                    outline: 'none',
+                    boxShadow: 'none',
                 },
                 ...theme.applyStyles('dark', {
                     backgroundColor: gray[800],
@@ -248,6 +287,8 @@ export const inputsCustomizations: Components<Theme> = {
                     },
                     '&:active': {
                         backgroundColor: gray[900],
+                        outline: 'none',
+                        boxShadow: 'none',
                     },
                 }),
                 variants: [
@@ -299,6 +340,14 @@ export const inputsCustomizations: Components<Theme> = {
                 textTransform: 'none',
                 borderRadius: '10px',
                 fontWeight: 500,
+                '&:focus': {
+                    outline: 'none',
+                    boxShadow: 'none',
+                },
+                '&:focus-visible': {
+                    outline: 'none',
+                    boxShadow: 'none',
+                },
                 ...theme.applyStyles('dark', {
                     color: gray[400],
                     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
@@ -333,8 +382,8 @@ export const inputsCustomizations: Components<Theme> = {
                     borderColor: brand[300],
                 },
                 '&.Mui-focusVisible': {
-                    outline: `3px solid ${alpha(brand[500], 0.5)}`,
-                    outlineOffset: '2px',
+                    outline: `1px solid ${alpha(brand[500], 0.3)}`, // ← УМЕНЬШИТЕ ИЛИ УБЕРИТЕ
+                    outlineOffset: '1px',
                     borderColor: brand[400],
                 },
                 '&.Mui-checked': {
@@ -355,8 +404,8 @@ export const inputsCustomizations: Components<Theme> = {
                     },
                     '&.Mui-focusVisible': {
                         borderColor: brand[400],
-                        outline: `3px solid ${alpha(brand[500], 0.5)}`,
-                        outlineOffset: '2px',
+                        outline: `1px solid ${alpha(brand[500], 0.3)}`, // ← УМЕНЬШИТЕ ИЛИ УБЕРИТЕ
+                        outlineOffset: '1px',
                     },
                 }),
             }),
@@ -391,7 +440,7 @@ export const inputsCustomizations: Components<Theme> = {
                     borderColor: gray[400],
                 },
                 [`&.${outlinedInputClasses.focused}`]: {
-                    outline: `3px solid ${alpha(brand[500], 0.5)}`,
+                    outline: `1px solid ${alpha(brand[500], 0.3)}`, // ← УМЕНЬШИТЕ
                     borderColor: brand[400],
                 },
                 ...theme.applyStyles('dark', {

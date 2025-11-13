@@ -49,8 +49,8 @@ services:
     build:
       context: .././frontend
       dockerfile: Dockerfile
-      platforms:
-        - "linux/amd64"
+#      platforms:
+#        - "linux/amd64"
       args:
         - VITE_API_BASE=http://trips.itmo.tw1.su:8080/itmo-trip/api/v1
         - VITE_API_TARGET=http://trips.itmo.tw1.su:8080

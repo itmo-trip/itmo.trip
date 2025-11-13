@@ -4,7 +4,6 @@
 /* eslint-disable */
 import type { LoginRequest } from '../models/LoginRequest';
 import type { LoginResponse } from '../models/LoginResponse';
-import type { RefreshRequest } from '../models/RefreshRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../../OpenAPI.custom';
 import { request as __request } from '../../request.custom';
@@ -30,18 +29,19 @@ export class AuthService {
     }
     /**
      * Refresh token
-     * @param requestBody
+     * @param refresh Refresh token
      * @returns LoginResponse Successful operation
      * @throws ApiError
      */
     public static postApiV1AuthRefresh(
-        requestBody: RefreshRequest,
+        refresh: string,
     ): CancelablePromise<LoginResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/auth/refresh',
-            body: requestBody,
-            mediaType: 'application/json',
+            headers: {
+                'Refresh': refresh,
+            },
             errors: {
                 401: `Unauthorized. Please check your credentials`,
             },

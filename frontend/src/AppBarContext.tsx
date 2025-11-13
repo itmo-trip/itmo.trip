@@ -3,7 +3,7 @@ import {createContext, useContext, useState, useCallback, type ReactNode} from "
 export type AppBarContextAction = { actionName: string; link: string }
 
 const INITIAL_ACTION: AppBarContextAction = {
-    actionName: "Мои объявления",
+    actionName: "Мои поездки",
     link: "/my_trips"
 }
 

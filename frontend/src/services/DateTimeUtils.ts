@@ -12,4 +12,21 @@ export default class DateTimeUtils {
 
         return format.format(date).replace(' ', 'T');
     }
+
+    static toMoscowDate(date: Date) {
+        return new Date(date.setHours(date.getHours() + 3))
+    }
+
+    static toISOString(date: Date | undefined) {
+        if (date == null) return undefined
+
+        const pad = (num: number) => (num < 10 ? '0' : '') + num
+
+        return date.getFullYear() +
+            '-' + pad(date.getMonth() + 1) +
+            '-' + pad(date.getDate()) +
+            'T' + pad(date.getHours()) +
+            ':' + pad(date.getMinutes()) +
+            ':' + pad(date.getSeconds())
+    }
 }

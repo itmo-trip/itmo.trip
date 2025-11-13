@@ -30,10 +30,7 @@ function App() {
     const handleLoginSuccess = async () => {
         setIsAuthenticated(true);
         try {
-            // Пока ждём переезда методов авторизации на бэке
-            const profile = await getUserProfile();
-            // Ждём переезда методов авторизации на бэке
-            //const profile = await MeService.getApiV1Me();
+            const profile = await MeService.getApiV1Me();
 
             setUser({studentId: `${profile.first_name} ${profile.last_name} (${profile.student_id})`});
             console.log("Успех нереальный");

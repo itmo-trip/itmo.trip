@@ -19,7 +19,7 @@ export const request = <T>(
             const token = AuthUtils.getIdToken();
 
             // Проверяем срок действия токена
-            if (token && AuthUtils.isTokenExpired(token)) {
+            if (token != null && AuthUtils.isTokenExpired(token)) {
                 await refreshTokens();
                 console.log("🔄 Токен был просрочен и обновлён");
             }

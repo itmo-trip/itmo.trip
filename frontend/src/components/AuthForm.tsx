@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 import {
     Card,
     TextField,
@@ -6,24 +6,34 @@ import {
     Typography,
     Box
 } from "@mui/material";
-import {login} from "../api/CustomAuthService.ts";
+import {AuthService} from "../api/generated";
+import AuthUtils from "../services/AuthUtils.ts";
 
 interface AuthFormProps {
     onSuccess: () => void;
 }
 
-export function AuthForm({ onSuccess }: AuthFormProps) {
+export function AuthForm({onSuccess}: AuthFormProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(false)
 
-        if (await login(username, password)) {
-            onSuccess();
-            setError(false);
-        } else {
+        try {
+            const loginResult = await AuthService.postApiV1AuthLogin({
+            username: username,
+            password: password
+        });
+
+        AuthUtils.setIdToken(loginResult.id_token!);
+        AuthUtils.setRefreshToken(loginResult.refresh_token!);
+
+        onSuccess();
+        } catch (err) {
+            console.error("Ошибка входа:", error);
             setError(true);
         }
     };

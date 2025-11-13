@@ -8,6 +8,7 @@ import ru.itmo.dws.itmotrip.service.LocationTypeService
 
 @Component
 class LocationTypeController(private val locationTypeService: LocationTypeService) : LocationTypesApiDelegate {
+
     override fun apiV1LocationTypesGet(): ResponseEntity<List<LocationTypeResponse>> {
         val locationTypes = locationTypeService.getAll()
         return ResponseEntity.ok(locationTypes)

@@ -179,6 +179,10 @@ class TripService(
             throw BadRequestException("Departure location and arrival location must be different")
         }
 
+        if (transportTypeService.existsById(transportTypeId).not()) {
+            throw BadRequestException("Transport type must exist")
+        }
+
         if (
             locationService.existsById(departureLocationId).not() &&
             locationService.existsById(arrivalLocationId).not()

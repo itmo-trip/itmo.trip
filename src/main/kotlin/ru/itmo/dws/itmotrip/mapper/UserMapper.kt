@@ -12,5 +12,5 @@ fun User.toUserResponse() = UserResponse(
     lastName = lastName,
     middleName = middleName,
     socialNetworkUsername = socialNetworkUsername,
-    studentId = studentId,
+    studentId = studentId
 )

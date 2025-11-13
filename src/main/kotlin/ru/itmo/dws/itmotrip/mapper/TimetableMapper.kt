@@ -6,5 +6,5 @@ import ru.itmo.dws.itmotrip.model.Timetable
 fun Timetable.toTimetableResponse() = TimetableResponse(
     id = id,
     endTimeUtc = endTimeUtc.toString(),
-    startTimeUtc = startTimeUtc.toString(),
+    startTimeUtc = startTimeUtc.toString()
 )

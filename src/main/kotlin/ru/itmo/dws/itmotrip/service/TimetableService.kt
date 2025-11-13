@@ -8,6 +8,7 @@ import ru.itmo.dws.itmotrip.repository.TimetableRepository
 class TimetableService (
     private val timetableRepository: TimetableRepository
 ) {
+
     fun getAll() : List<Timetable> {
         return timetableRepository.getAll()
     }

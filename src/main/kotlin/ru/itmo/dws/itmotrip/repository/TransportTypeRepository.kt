@@ -7,6 +7,7 @@ import ru.itmo.dws.itmotrip.model.TransportType
 
 @Repository
 interface TransportTypeRepository : CrudRepository<TransportType, Long> {
+
     @Query("SELECT * FROM transport_types")
     fun getAll(): List<TransportType>
 

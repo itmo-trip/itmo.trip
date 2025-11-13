@@ -12,6 +12,7 @@ export type { LocationResponse } from './models/LocationResponse';
 export type { LocationTypeResponse } from './models/LocationTypeResponse';
 export type { LoginRequest } from './models/LoginRequest';
 export type { LoginResponse } from './models/LoginResponse';
+export type { RefreshRequest } from './models/RefreshRequest';
 export type { TimetableResponse } from './models/TimetableResponse';
 export type { TransportTypeResponse } from './models/TransportTypeResponse';
 export type { TripRequest } from './models/TripRequest';

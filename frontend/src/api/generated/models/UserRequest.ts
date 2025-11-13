@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UserRequest = {
-    bio?: string | null;
+    bio?: string;
     social_network_username?: string;
 };
 

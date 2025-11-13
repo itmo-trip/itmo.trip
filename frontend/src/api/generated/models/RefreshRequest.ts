@@ -2,12 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type LoginResponse = {
-    access_token: string;
-    expires_in: number;
+export type RefreshRequest = {
     refresh_token: string;
-    refresh_expires_in: number;
-    id_token: string;
-    session_state: string;
 };
 

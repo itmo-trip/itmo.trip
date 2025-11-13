@@ -36,8 +36,9 @@ export const OpenAPI: OpenAPIConfig = {
         const idToken = localStorage.getItem("idToken");
         const refreshToken = localStorage.getItem("refreshToken");
 
-        headers['Authorization'] = `Bearer ${idToken}`;
-        headers['Refresh'] = refreshToken!;
+        if (idToken) headers['Authorization'] = `Bearer ${idToken}`;
+        if (refreshToken) headers['Refresh'] = refreshToken!;
+
         return headers;
     },
     ENCODE_PATH: undefined,

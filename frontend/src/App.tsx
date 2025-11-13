@@ -1,12 +1,16 @@
-import './App.css';
+import {Route, Routes} from "react-router-dom";
+import './App.css'
 import AppTheme from './theme/AppTheme';
 import TripsTape from './components/TripsTape.tsx';
-import { Container, CssBaseline, Modal, Box } from '@mui/material';
-import AppAppBar from './components/AppAppBar.tsx';
-import { useEffect, useState } from 'react';
-import { AuthForm } from './components/AuthForm.tsx';
-import { SuccessLoginToast } from './components/SuccessLoginToast.tsx';
-import { getUserProfile } from './api/CustomAuthService.ts';
+import {Container, CssBaseline} from "@mui/material";
+import {AppAppBar} from "./components/AppAppBar.tsx";
+import {useEffect, useState} from "react";
+import {AuthForm} from "./components/AuthForm.tsx";
+import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
+import {Modal, Box} from '@mui/material';
+import {MeService} from "./api/generated";
+import MyTripsTape from "./components/MyTripsTape.tsx";
+import {AppBarProvider} from "./AppBarContext.tsx";
 
 function checkAuthFromStorage(): boolean {
     const idToken = localStorage.getItem('idToken');
@@ -29,14 +33,9 @@ function App() {
     }, []);
 
     const handleLoginSuccess = async () => {
+        setIsAuthenticated(true);
         try {
-            console.log("here 222222");
-            const profile = await getUserProfile();
-
-            console.log("here 3123");
-            setUser({
-                studentId: `${profile.first_name} ${profile.last_name} (${profile.student_id})`,
-            });
+            const profile = await MeService.getApiV1Me();
 
             const isComplete =
                 !!profile.bio && !!profile.social_network_username;
@@ -120,6 +119,10 @@ function App() {
                         gap: 4,
                     }}
                 >
+                    <Routes>
+                        <Route path="/" element={<TripsTape/>}/>
+                        <Route path="my_trips" element={<MyTripsTape/>}/>
+                    </Routes>
                     <TripsTape />
                 </Container>
             </AppTheme>

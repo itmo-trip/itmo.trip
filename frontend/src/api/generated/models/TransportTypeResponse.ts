@@ -3,8 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export type TransportTypeResponse = {
-    id?: number;
-    logo_url?: string | null;
-    name_ru?: string;
+    id: number;
+    logo_url?: string;
+    name_ru: string;
 };
 

@@ -37,7 +37,7 @@ export const TripAuthor: FC<TripAuthorProps> = (props) => {
                         </Avatar>
 
                         <Grid container flexDirection="column" width='100%' minWidth={0}>
-                            <Grid container direction={"row"} justifyContent='space-between' spacing={2}>
+                            <Grid container direction={"row"} spacing={1.5}>
                                 <Typography variant="subtitle1">
                                     {props.author.name}
                                 </Typography>
@@ -45,7 +45,6 @@ export const TripAuthor: FC<TripAuthorProps> = (props) => {
                                 <Box sx={{
                                     display: 'flex',
                                     gap: 1,
-                                    justifyContent: 'flex-end',
                                     alignItems: 'center',
                                     flex: 1
                                 }}>

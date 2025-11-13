@@ -1,13 +1,16 @@
-import { alpha, styled } from '@mui/material/styles';
+import {alpha, styled} from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import ColorModeIconDropdown from '.././theme/ColorModeIconDropdown';
 import Sitemark from './ItmoTripIcon.tsx';
-import {Box, Button, InputBase } from "@mui/material";
+import {Box, Button, InputBase} from "@mui/material";
 import {logout} from "../api/CustomAuthService.ts";
+import {Link} from "react-router-dom";
+import type {FC} from "react";
+import {useAppBarAction} from "../AppBarContext.tsx";
 
-const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -23,16 +26,23 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     padding: '8px 12px',
 }));
 
-export default function AppAppBar({ user, onLogout }: { user?: { studentId?: string }, onLogout?: () => void }) {
+interface AppBarProps {
+    user?: { studentId?: string },
+    onLogout: () => void;
+}
+
+export const AppAppBar: FC<AppBarProps> = (props: AppBarProps) => {
     // const [open, setOpen] = React.useState(false);
     //
     // const toggleDrawer = (newOpen: boolean) => () => {
     //     setOpen(newOpen);
     // };
 
+    const { action } = useAppBarAction();
+
     const handleLogout = () => {
         logout();
-        if (onLogout) onLogout();
+        if (props.onLogout) props.onLogout();
     };
 
     return (
@@ -48,19 +58,22 @@ export default function AppAppBar({ user, onLogout }: { user?: { studentId?: str
         >
             <Container maxWidth="lg">
                 <StyledToolbar variant="dense" disableGutters>
-                    <Box sx={{ display: 'flex', alignItems: 'center', px: 0 }}>
-                        <Sitemark />
-                        <Box>
-                            <Button variant="text" color="info" size="small">
-                                Мои объявления
-                            </Button>
-                        </Box>
+                    <Box sx={{display: 'flex', alignItems: 'center', px: 0}}>
+                        <Sitemark/>
+                        {action && <Link
+                            to={action.link}>
+                            <Box>
+                                <Button variant="text" color="info" size="small">
+                                    {action.actionName}
+                                </Button>
+                            </Box>
+                        </Link>}
                     </Box>
-                    <Box sx={{ gap: 1, display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{gap: 1, display: 'flex', alignItems: 'center'}}>
 
-                        {user?.studentId && (
+                        {props.user?.studentId && (
                             <InputBase
-                                value={`${user.studentId}`}
+                                value={`${props.user.studentId}`}
                                 readOnly
                                 sx={{
                                     borderRadius: 1,

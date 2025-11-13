@@ -1,10 +1,14 @@
 package ru.itmo.dws.itmotrip.security.filter
 
 import api.myitmo.model.personality.Personality
+import com.auth0.jwt.exceptions.TokenExpiredException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import java.time.LocalDateTime
 import java.util.*
+import okhttp3.internal.UTC
+import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -49,23 +53,29 @@ class JwtAuthFilter(
         }
 
         val token = authHeader.substring(BEARER.length)
-        val decoded = itmoJwtVerifier.verifyAndDecode(token)
-        val jwtModel = itmoJwtVerifier.parseJWTToModel(decoded)
-        val personalityFromMyItmo = myItmoService.getPersonByIsuId(jwtModel.isuId)
-        val user = buildUser(jwtModel, personalityFromMyItmo)
-        userService.create(user)
-        val userDetails = userDetailsService.loadUserByUsername(user.studentId)
+        try {
+            val decoded = itmoJwtVerifier.verifyAndDecode(token)
+            val jwtModel = itmoJwtVerifier.parseJWTToModel(decoded)
+            val personalityFromMyItmo = myItmoService.getPersonByIsuId(jwtModel.isuId)
+            val user = buildUser(jwtModel, personalityFromMyItmo)
+            userService.create(user)
+            val userDetails = userDetailsService.loadUserByUsername(user.studentId)
 
-        if (SecurityContextHolder.getContext().authentication == null) {
-            val authentication = UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.authorities
-            ).apply {
-                details = WebAuthenticationDetailsSource().buildDetails(request)
+            if (SecurityContextHolder.getContext().authentication == null) {
+                val authentication = UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.authorities
+                ).apply {
+                    details = WebAuthenticationDetailsSource().buildDetails(request)
+                }
+                SecurityContextHolder.getContext().authentication = authentication
             }
-            SecurityContextHolder.getContext().authentication = authentication
-        }
 
-        filterChain.doFilter(request, response)
+            filterChain.doFilter(request, response)
+        } catch (e: TokenExpiredException) {
+            response.status = HttpStatus.FORBIDDEN.value()
+            response.writer.write("Your token has expired on ${LocalDateTime.ofInstant(e.expiredOn, UTC.toZoneId())}")
+            return
+        }
     }
 
     private fun buildUser(jwtModel: JwtModel, personality: Personality): User {

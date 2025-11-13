@@ -91,7 +91,6 @@ export const TripAuthor: FC<TripAuthorProps> = (props) => {
                             </Grid>
                         </Grid>
                     </Box>
-
                 </Box>
             </Box>
         </Grid>

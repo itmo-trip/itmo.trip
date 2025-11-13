@@ -4,13 +4,13 @@ import {styled} from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import * as React from "react";
-import {AccessTime, CalendarToday, DirectionsCar, LocationOn} from "@mui/icons-material";
+import {AccessTime, CalendarToday, DeleteOutline, DirectionsCar, LocationOn} from "@mui/icons-material";
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import {Box} from "@mui/material";
 import {TripMap} from "./TripMap.tsx";
 import type {ITrip} from "../models/ITrip.ts";
 import type {FC} from "react";
-import {TripAuthor} from "./TripAuthor.tsx";
+import IconButton from "@mui/material/IconButton";
 
 const StyledCard = styled(Card)(({theme}) => ({
     display: 'flex',
@@ -48,7 +48,7 @@ interface TripProps {
     tripData: ITrip
 }
 
-const Trip: FC<TripProps> = (props) => {
+const MyTrip: FC<TripProps> = (props) => {
     const [focusedCardIndex, setFocusedCardIndex] = React.useState<number | null>(
         null,
     );
@@ -84,11 +84,31 @@ const Trip: FC<TripProps> = (props) => {
             {/* Трип */}
             <CardContent sx={{flexGrow: 1, p: 2, pb: 0, mb: 0}}>
                 {/* Заголовок маршрута */}
-                <Box sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mb: 0.5}}>
-                    <LocationOn sx={{color: 'primary.main', mr: 0.6, fontSize: 20, ml: -0.4}}/>
-                    <Typography variant="h6" sx={{fontWeight: 'bold', lineHeight: 1, mt: 0.3, textAlign: "left"}}>
-                        {'Площадь восстания'} {} → {'ИТМО на Кронверском'}
-                    </Typography>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5}}>
+                    <Box sx={{display: 'flex', alignItems: 'flex-start', ml: -0.3}}>
+                        <LocationOn sx={{color: 'primary.main', mr: 0.6, fontSize: 20}}/>
+                        <Typography variant="h6" sx={{fontWeight: 'bold', lineHeight: 1, mt: 0.3, textAlign: "left"}}>
+                            {'Площадь восстания'} → {'ИТМО на Кронверском'}
+                        </Typography>
+                    </Box>
+                    <Grid style={{marginRight: -6}}>
+                        <IconButton
+                            size="medium"
+                            onClick={() => console.log('Edit profile')}
+                            sx={{
+                                border: 'none',
+                                width: 30,
+                                height: 30,
+                                borderRadius: 3,
+                                '&:focus': {outline: 'none'},
+                                '&:hover': {
+                                    backgroundColor: 'action.hover',
+                                }
+                            }}
+                        >
+                            <DeleteOutline fontSize="medium" sx={{fontSize: 18}}/>
+                        </IconButton>
+                    </Grid>
                 </Box>
 
                 {/* Дата и время прибытия, вид транспорта */}
@@ -179,10 +199,8 @@ const Trip: FC<TripProps> = (props) => {
                     </Box>
                 )}
             </CardContent>
-
-            <TripAuthor author={props.tripData.author} />
         </StyledCard>
     )
 }
 
-export default Trip
+export default MyTrip

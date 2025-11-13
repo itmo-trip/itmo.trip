@@ -9,7 +9,7 @@ export const authors: IAuthor[] = [
         courseNumber: 1,
         facultyName: 'ИПКН',
         tg_username: '@kalinc',
-        bio: 'Много разных увлечений'
+        bio: 'Много разных увлечений, увлечений, увлечений'
     },
     {
         id: 2,

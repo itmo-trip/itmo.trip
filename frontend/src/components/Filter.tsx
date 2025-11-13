@@ -34,7 +34,7 @@ const Filter = () => {
     }
 
     return (
-        <>
+        <div style={{marginRight: 16}}>
             <Box
                 sx={{
                     display: {xs: 'flex', sm: 'none'},
@@ -42,13 +42,15 @@ const Filter = () => {
                     gap: 1,
                     width: '100%',
                     overflow: 'auto',
+                    columnGap: 2,
                 }}
             >
                 <Search/>
                 <IconButton size="small" aria-label="RSS feed">
                     <RssFeedRoundedIcon/>
                 </IconButton>
-            </Box><Box
+            </Box>
+            <Box
             sx={{
                 display: 'flex',
                 flexDirection: {xs: 'column-reverse', md: 'row'},
@@ -111,11 +113,8 @@ const Filter = () => {
                 }}
             >
                 <Search/>
-                <IconButton size="small" aria-label="RSS feed">
-                    <RssFeedRoundedIcon/>
-                </IconButton>
             </Box>
-        </Box></>
+        </Box></div>
     )
 }
 

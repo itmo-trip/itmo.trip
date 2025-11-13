@@ -3,13 +3,14 @@ import './App.css'
 import AppTheme from './theme/AppTheme';
 import TripsTape from './components/TripsTape.tsx';
 import {Container, CssBaseline} from "@mui/material";
-import AppAppBar from "./components/AppAppBar.tsx";
+import {AppAppBar} from "./components/AppAppBar.tsx";
 import {useEffect, useState} from "react";
 import {AuthForm} from "./components/AuthForm.tsx";
 import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
 import {Modal, Box} from '@mui/material';
 import {MeService} from "./api/generated";
 import MyTripsTape from "./components/MyTripsTape.tsx";
+import {AppBarProvider} from "./AppBarContext.tsx";
 
 function checkAuthFromStorage(): boolean {
     const idToken = localStorage.getItem('idToken');
@@ -24,14 +25,13 @@ function App() {
     const [user, setUser] = useState<{ studentId?: string } | null>(null);
 
     useEffect(() => {
-        // Проверяем токены при запуске
-        console.log("here 1");
         if (checkAuthFromStorage()) {
-            handleLoginSuccess();
+            setIsAuthenticated(true);
         }
     }, []);
 
     const handleLoginSuccess = async () => {
+        setIsAuthenticated(true);
         try {
             const profile = await MeService.getApiV1Me();
 
@@ -131,4 +131,4 @@ function App() {
     );
 }
 
-export default App;
+export default App

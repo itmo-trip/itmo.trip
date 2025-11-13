@@ -15,7 +15,7 @@ type AppBarContextValue = {
 
 const AppBarContext = createContext<AppBarContextValue | undefined>(undefined);
 
-export function AppBarProvider({children}: { children: ReactNode }) {
+export default function AppBarProvider({children}: { children: ReactNode }) {
     const [action, setActionState] = useState<AppBarContextAction>(INITIAL_ACTION);
 
     const setAction = useCallback((action: AppBarContextAction) => {

@@ -3,14 +3,14 @@ import './App.css'
 import AppTheme from './theme/AppTheme';
 import TripsTape from './components/TripsTape.tsx';
 import {Container, CssBaseline} from "@mui/material";
-import {AppAppBar} from "./components/AppAppBar.tsx";
+import AppAppBar from "./components/AppAppBar.tsx";
 import {useEffect, useState} from "react";
 import {AuthForm} from "./components/AuthForm.tsx";
 import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
 import {Modal, Box} from '@mui/material';
 import {MeService} from "./api/generated";
 import MyTripsTape from "./components/MyTripsTape.tsx";
-import {AppBarProvider} from "./AppBarContext.tsx";
+import AppBarProvider from "./AppBarContext";
 
 function checkAuthFromStorage(): boolean {
     const idToken = localStorage.getItem('idToken');
@@ -63,8 +63,11 @@ function App() {
         setToastMessage('Профиль успешно дополнен!');
     };
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <>
+        <AppBarProvider>
             <Modal
                 open={!isAuthenticated}
                 aria-labelledby="auth-form-modal"
@@ -101,32 +104,32 @@ function App() {
                 />
             )}
 
-            <AppTheme>
-                <CssBaseline enableColorScheme />
-                <AppAppBar
-                    // @ts-ignore
-                    user={user}
-                    onLogout={() => {
-                        setIsAuthenticated(false);
-                        setIsProfileComplete(false);
-                        setUser(null);
-                    }}
-                />
-                <Container
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        my: 10,
-                        gap: 4,
-                    }}
-                >
-                    <Routes>
-                        <Route path="/" element={<TripsTape/>}/>
-                        <Route path="my_trips" element={<MyTripsTape/>}/>
-                    </Routes>
-                    <TripsTape />
-                </Container>
-            </AppTheme>
+                <AppTheme>
+                    <CssBaseline enableColorScheme/>
+                    <AppAppBar
+                        // @ts-ignore
+                        user={user}
+                        onLogout={() => {
+                            setIsAuthenticated(false);
+                            setIsProfileComplete(false);
+                            setUser(null);
+                        }}
+                    />
+                    <Container
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            my: 10,
+                            gap: 4,
+                        }}
+                    >
+                        <Routes>
+                            <Route path="/" element={<TripsTape/>}/>
+                            <Route path="my_trips" element={<MyTripsTape/>}/>
+                        </Routes>
+                    </Container>
+                </AppTheme>
+            </AppBarProvider>
         </>
     );
 }

@@ -21,7 +21,6 @@ function App() {
     const [user, setUser] = useState<{ studentId?: string } | null>(null);
 
     useEffect(() => {
-        handleLoginSuccess()
         if (checkAuthFromStorage()) {
             setIsAuthenticated(true);
         }

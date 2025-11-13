@@ -150,14 +150,20 @@ class TripService(
             throw ForbiddenException(user.id)
         }
 
-        val newTrip = tripRepository.save(
-            tripRequest.toTrip(
-                id = oldTrip.id,
-                creatorId = oldTrip.creatorId,
-                status = tripRequest.status?.let { TripStatus.fromString(it) }
-                    ?: throw BadRequestException("Invalid trip status: ${tripRequest.status}"),
-            )
+        tripRepository.updateById(
+            id = oldTrip.id,
+            seriesId = tripRequest.seriesId,
+            transportTypeId = tripRequest.transportTypeId,
+            departureTime = tripRequest.departureTime?.toUtcLocalDateTime(),
+            arrivalTime = tripRequest.arrivalTime?.toUtcLocalDateTime(),
+            departureLocationId = tripRequest.departureLocationId,
+            arrivalLocationId = tripRequest.arrivalLocationId,
+            status = tripRequest.status?.let { TripStatus.fromString(it) }?.toString()
+                ?: throw BadRequestException("Invalid trip status: ${tripRequest.status}"),
+            comment = tripRequest.comment
         )
+
+        val newTrip = tripRepository.getById(id) ?: throw TripNotFoundException(id)
 
         return fetchTripResponse(newTrip)
     }
@@ -171,6 +177,13 @@ class TripService(
         }
         if (departureLocationId == arrivalLocationId) {
             throw BadRequestException("Departure location and arrival location must be different")
+        }
+
+        if (
+            locationService.existsById(departureLocationId).not() &&
+            locationService.existsById(arrivalLocationId).not()
+        ) {
+            throw BadRequestException("Departure and arrival locations must exist")
         }
     }
 

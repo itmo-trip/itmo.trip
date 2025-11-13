@@ -60,4 +60,32 @@ interface TripRepository : CrudRepository<Trip, UUID> {
         status: String,
         comment: String?
     )
+
+    @Query(
+        """
+            UPDATE trips 
+            SET
+                series_id = :seriesId,
+                transport_type_id = :transportTypeId,
+                departure_time = :departureTime,
+                arrival_time = :arrivalTime,
+                departure_location_id = :departureLocationId,
+                arrival_location_id = :arrivalLocationId,
+                status = :status::trip_status,
+                comment = :comment
+            WHERE id = :id
+        """
+    )
+    @Modifying
+    fun updateById(
+        id: UUID,
+        seriesId: UUID?,
+        transportTypeId: Long,
+        departureTime: LocalDateTime?,
+        arrivalTime: LocalDateTime?,
+        departureLocationId: UUID,
+        arrivalLocationId: UUID,
+        status: String,
+        comment: String?
+    )
 }

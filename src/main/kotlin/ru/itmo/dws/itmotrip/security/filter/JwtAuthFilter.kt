@@ -53,7 +53,7 @@ class JwtAuthFilter(
         val jwtModel = itmoJwtVerifier.parseJWTToModel(decoded)
         val personalityFromMyItmo = myItmoService.getPersonByIsuId(jwtModel.isuId)
         val user = buildUser(jwtModel, personalityFromMyItmo)
-        userService.insert(user)
+        userService.create(user)
         val userDetails = userDetailsService.loadUserByUsername(user.studentId)
 
         if (SecurityContextHolder.getContext().authentication == null) {

@@ -13,16 +13,18 @@ class UserService(
     private val userRepository: UserRepository
 ) {
 
+    @Transactional(readOnly = true)
     fun getByIsuId(isu: String): User? {
         return userRepository.getByIsuId(isu)
     }
 
+    @Transactional(readOnly = true)
     fun getById(id: UUID): User {
         return userRepository.getById(id) ?: throw UserNotFoundException(id)
     }
 
     @Transactional
-    fun insert(user: User) {
+    fun create(user: User) {
         userRepository.insert(
             user.studentId,
             user.faculty,

@@ -14,6 +14,16 @@ class UnauthorizedException(message: String, exception: Throwable?) : ItmoTripEx
     override val statusCode: HttpStatus = HttpStatus.UNAUTHORIZED
 }
 
+class ForbiddenException(
+    userId: UUID
+) : ItmoTripException("User with id=$userId is not allowed to perform this action") {
+    override val statusCode: HttpStatus = HttpStatus.FORBIDDEN
+}
+
+class BadRequestException(message: String) : ItmoTripException(message) {
+    override val statusCode: HttpStatus = HttpStatus.BAD_REQUEST
+}
+
 open class NotFoundException(
     entityName: String,
     entityId: String,
@@ -22,3 +32,4 @@ open class NotFoundException(
 }
 
 class UserNotFoundException(id: UUID) : NotFoundException("User", id.toString())
+class TripNotFoundException(id: UUID) : NotFoundException("Trip", id.toString())

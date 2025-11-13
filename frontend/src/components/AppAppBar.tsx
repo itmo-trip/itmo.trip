@@ -22,7 +22,8 @@ const StyledToolbar = styled(Toolbar)(({theme}) => ({
         ? `rgba(${theme.vars.palette.background.defaultChannel} / 0.4)`
         : alpha(theme.palette.background.default, 0.4),
     boxShadow: (theme.vars || theme).shadows[1],
-    padding: '8px 12px',
+    padding: '8px 10px',
+    marginLeft: -10
 }));
 
 export default function AppAppBar({ user, onLogout }: { user?: { studentId?: string }, onLogout?: () => void }) {

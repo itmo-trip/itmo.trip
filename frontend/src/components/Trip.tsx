@@ -133,8 +133,7 @@ const Trip: FC<TripProps> = (props) => {
                         departureCoords={props.tripData.departure_coords}
                         arrivalCoords={props.tripData.arrival_coords}
                         tripDateTime={props.tripData.arrival_time}
-                        isDateTimeArrival={false}
-                        isPublicTransport={false}
+                        isPublicTransport={props.tripData.transport_type === "Общественный транспорт"}
                     />
                 </Box>
 

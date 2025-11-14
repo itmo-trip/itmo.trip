@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import {trips} from "../TestData.ts";
 import Masonry from '@mui/lab/Masonry';
 import {useEffect, useState} from "react";
 import {useAppBarAction} from "../AppBarContext.tsx";
@@ -10,7 +9,7 @@ import {Button} from "@mui/material";
 import NewTripModal from "./NewTripModal.tsx";
 import type {ITrip} from "../models/ITrip.ts";
 import {MeService} from "../api/generated";
-import {SuccessLoginToast} from "./SuccessLoginToast.tsx";
+import type {IAuthor} from "../models/IAuhor.ts";
 
 interface MyTripsTapeProps {
     trips: ITrip[]
@@ -20,8 +19,9 @@ interface MyTripsTapeProps {
 
 export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
     const [newTripOpen, setNewTripOpen] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
+    const [_, setToastMessage] = useState('');
     const [userId, setUserId] = useState("");
+    const [author, setAuthor] = useState<IAuthor | undefined>(undefined);
 
     const {setAction, reset} = useAppBarAction();
     useEffect(() => {
@@ -34,13 +34,24 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
     }, [setAction, reset]);
 
     useEffect(() => {
-        fetchAndSetUserId()
+        setUserProfile()
     }, []);
 
-    const fetchAndSetUserId = async () => {
-        const meResponse = await MeService.getApiV1Me();
-        setUserId(meResponse.id)
-        return;
+
+    const setUserProfile = async () => {
+        const me = await MeService.getApiV1Me()
+        setUserId(me.id)
+        console.log(me)
+        const author: IAuthor = {
+            id: me.id,
+            name: me.first_name,
+            avatar: me.avatar_url!,
+            courseNumber: 1,
+            facultyName: me.faculty,
+            tg_username: me.social_network_username!,
+            bio: me.bio!
+        }
+        setAuthor(author)
     }
 
     return (
@@ -60,20 +71,14 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
                         Создать поездку
                     </Button>
                 </Grid>
-                <Grid size={{md: 6, xs: 12}} sx={{order: {xs: 1, md: 2}}}>
-                    <UserInfo author={trips[0].author}/>
-                </Grid>
+                {author && <Grid size={{md: 6, xs: 12}} sx={{order: {xs: 1, md: 2}}}>
+                    <UserInfo author={author}/>
+                </Grid>}
             </Grid>
 
-            {toastMessage && (
-                <SuccessLoginToast
-                    message={toastMessage}
-                    onClose={() => setToastMessage('')}
-                />
-            )}
 
-
-            <Box sx={{width: '100%', marginRight: 12}}>
+            {(props.userId || userId) &&
+                <Box sx={{width: '100%', marginRight: 12}}>
                 <Masonry
                     columns={{xs: 1, md: 2}}
                     spacing={2}
@@ -84,7 +89,7 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
                         </div>
                     ))}
                 </Masonry>
-            </Box>
+            </Box>}
 
             {newTripOpen &&
                 <NewTripModal

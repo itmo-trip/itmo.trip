@@ -10,7 +10,6 @@ interface TripMapProps {
     departureCoords: Coordinates;
     arrivalCoords: Coordinates;
     tripDateTime: Date; // Для построения маршрута в Яндекс Картах
-    isDateTimeArrival: boolean; // Для построения маршрута в Яндекс Картах
     isPublicTransport: boolean; // Для построения маршрута в Яндекс Картах
 }
 
@@ -78,7 +77,7 @@ export const TripMap: React.FC<TripMapProps> = (props) => {
         const [depLat, depLng] = props.departureCoords;
         const [arrLat, arrLng] = props.arrivalCoords;
         const transportType = props.isPublicTransport ? 'mt' : 'auto';
-        const dateTimeType = props.isDateTimeArrival ? 'arrival' : 'departure';
+        const dateTimeType = 'arrival';
         const dateTimeWithoutMs = DateTimeUtils.toDateTimeString(props.tripDateTime);
 
         const url = `https://yandex.ru/maps/?rtext=${depLat},${depLng}~${arrLat},${arrLng}&routes[timeDependent][type]=${dateTimeType}&routes[timeDependent][time]=${dateTimeWithoutMs}&rtt=${transportType}`;

@@ -54,7 +54,7 @@ const steps = ["Отправление", "Прибытие", "Дополните
 
 const NewTripModal: FC<NewTripProps> = (props) => {
     const [newTripState, setNewTripState] = useState<NewTripState>({
-        arrival_time: undefined,
+        arrival_time: new Date(),
         departure_time: new Date(),
         transport_type_id: undefined,
         comment: "",
@@ -243,7 +243,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
                                     label="Время прибытия"
                                     type="datetime-local"
                                     variant='standard'
-                                    value={DateTimeUtils.toISOString(newTripState.departure_time) ?? ''}
+                                    value={DateTimeUtils.toISOString(newTripState.arrival_time) ?? ''}
                                     onChange={(e) => {
                                         setNewTripState(prevState => ({
                                             ...prevState,

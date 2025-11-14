@@ -1,16 +1,18 @@
 import {Route, Routes} from "react-router-dom";
 import './App.css'
 import AppTheme from './theme/AppTheme';
-import TripsTape from './components/TripsTape.tsx';
+import {TripsTape} from './components/TripsTape.tsx';
 import {Container, CssBaseline} from "@mui/material";
 import AppAppBar from "./components/AppAppBar.tsx";
 import {useEffect, useState} from "react";
 import {AuthForm} from "./components/AuthForm.tsx";
 import {SuccessLoginToast} from "./components/SuccessLoginToast.tsx";
 import {Modal, Box} from '@mui/material';
-import {MeService} from "./api/generated";
-import MyTripsTape from "./components/MyTripsTape.tsx";
+import {MeService, TripsService} from "./api/generated";
+import {MyTripsTape} from "./components/MyTripsTape.tsx";
 import AppBarProvider from "./AppBarContext";
+import type {ITrip} from "./models/ITrip.ts";
+import Utils from "./services/Utils.ts";
 
 function checkAuthFromStorage(): boolean {
     const idToken = localStorage.getItem('idToken');
@@ -23,8 +25,22 @@ function App() {
     const [, setIsProfileComplete] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [user, setUser] = useState<{ studentId?: string } | null>(null);
+    const [userId, setUserId] = useState("");
+    const [globalTrips, setGlobalTrips] = useState<ITrip[]>([]);
+
+    const getTrips = async () => {
+        try {
+            const response = await TripsService.getApiV1Trips();
+            const mapped = response.map(Utils.mapTripResponseToITrip);
+
+            setGlobalTrips(mapped);
+        } catch (e) {
+            console.error("Ошибка:", e);
+        }
+    };
 
     useEffect(() => {
+        getTrips();
         if (checkAuthFromStorage()) {
             setIsAuthenticated(true);
         }
@@ -36,6 +52,7 @@ function App() {
             const profile = await MeService.getApiV1Me();
 
             setUser({studentId: `${profile.first_name} ${profile.last_name} (${profile.student_id})`});
+            setUserId(profile.id);
 
             const isComplete =
                 !!profile.bio && !!profile.social_network_username;
@@ -124,8 +141,8 @@ function App() {
                         }}
                     >
                         <Routes>
-                            <Route path="/" element={<TripsTape/>}/>
-                            <Route path="my_trips" element={<MyTripsTape/>}/>
+                            <Route path="/" element={<TripsTape trips={globalTrips}/>}/>
+                            <Route path="my_trips" element={<MyTripsTape trips={globalTrips} userId={userId}/>}/>
                         </Routes>
                     </Container>
                 </AppTheme>

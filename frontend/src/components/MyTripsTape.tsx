@@ -8,8 +8,15 @@ import {UserInfo} from "./UserInfo.tsx";
 import Grid from "@mui/material/Grid";
 import {Button} from "@mui/material";
 import NewTripModal from "./NewTripModal.tsx";
+import type {ITrip} from "../models/ITrip.ts";
+import {MeService} from "../api/generated";
 
-export default function MyTripsTape() {
+interface MyTripsTapeProps {
+    trips: ITrip[]
+    userId: string
+}
+
+export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
     const [newTripOpen, setNewTripOpen] = useState(false);
 
     const {setAction, reset} = useAppBarAction();
@@ -21,6 +28,16 @@ export default function MyTripsTape() {
 
         return () => reset();
     }, [setAction, reset]);
+
+    useEffect(() => {
+        fetchAndSetUserId()
+    }, []);
+
+    const fetchAndSetUserId = async () => {
+        const meResponse = await MeService.getApiV1Me();
+        props.userId = meResponse.id;
+        return ;
+    }
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, width: '100%'}}>
@@ -50,7 +67,7 @@ export default function MyTripsTape() {
                     columns={{xs: 1, md: 2}}
                     spacing={2}
                 >
-                    {trips.map((tr, index) => (
+                    {props.trips.filter(tr => tr.author.id === props.userId).map((tr, index) => (
                         <div key={index}>
                             <MyTrip tripData={tr} />
                         </div>

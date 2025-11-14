@@ -84,42 +84,42 @@ function App() {
     // @ts-ignore
     return (
         <>
-        <AppBarProvider>
-            <Modal
-                open={!isAuthenticated}
-                aria-labelledby="auth-form-modal"
-                aria-describedby="auth-form-to-login"
-                sx={{
-                    backdropFilter: 'blur(8px)',
-                    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                <Box
+            <AppBarProvider>
+                <Modal
+                    open={!isAuthenticated}
+                    aria-labelledby="auth-form-modal"
+                    aria-describedby="auth-form-to-login"
                     sx={{
-                        bgcolor: 'background.grey',
-                        boxShadow: 24,
-                        borderRadius: 10,
-                        p: 4,
-                        minWidth: 360,
-                        maxWidth: '90%',
+                        backdropFilter: 'blur(8px)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
                 >
-                    <AuthForm
-                        onSuccess={handleLoginSuccess}
-                        onProfileComplete={handleProfileCompleted}
-                    />
-                </Box>
-            </Modal>
+                    <Box
+                        sx={{
+                            bgcolor: 'background.grey',
+                            boxShadow: 24,
+                            borderRadius: 10,
+                            p: 4,
+                            minWidth: 360,
+                            maxWidth: '90%',
+                        }}
+                    >
+                        <AuthForm
+                            onSuccess={handleLoginSuccess}
+                            onProfileComplete={handleProfileCompleted}
+                        />
+                    </Box>
+                </Modal>
 
-            {toastMessage && (
-                <SuccessLoginToast
-                    message={toastMessage}
-                    onClose={() => setToastMessage('')}
-                />
-            )}
+                {toastMessage && (
+                    <SuccessLoginToast
+                        message={toastMessage}
+                        onClose={() => setToastMessage('')}
+                    />
+                )}
 
                 <AppTheme>
                     <CssBaseline enableColorScheme/>
@@ -142,7 +142,13 @@ function App() {
                     >
                         <Routes>
                             <Route path="/" element={<TripsTape trips={globalTrips}/>}/>
-                            <Route path="my_trips" element={<MyTripsTape trips={globalTrips} userId={userId}/>}/>
+                            <Route path="my_trips" element={
+                                <MyTripsTape
+                                    trips={globalTrips}
+                                    userId={userId}
+                                    onNewTrip={async () => await getTrips()}
+                                />}
+                            />
                         </Routes>
                     </Container>
                 </AppTheme>

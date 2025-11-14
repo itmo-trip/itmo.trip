@@ -23,6 +23,7 @@ import Utils from "../services/Utils.ts";
 interface NewTripProps {
     isOpen: boolean;
     close: any;
+    onNewTrip: () => Promise<void>;
 }
 
 interface NewTripState {
@@ -142,6 +143,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
             }
 
             await TripsService.postApiV1Trips(tripRequest)
+            props.onNewTrip()
             clearModal()
             props.close()
         } catch (e) {

@@ -10,14 +10,18 @@ import {Button} from "@mui/material";
 import NewTripModal from "./NewTripModal.tsx";
 import type {ITrip} from "../models/ITrip.ts";
 import {MeService} from "../api/generated";
+import {SuccessLoginToast} from "./SuccessLoginToast.tsx";
 
 interface MyTripsTapeProps {
     trips: ITrip[]
     userId: string
+    onNewTrip: () => Promise<void>;
 }
 
 export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
     const [newTripOpen, setNewTripOpen] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [userId, setUserId] = useState("");
 
     const {setAction, reset} = useAppBarAction();
     useEffect(() => {
@@ -35,8 +39,8 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
 
     const fetchAndSetUserId = async () => {
         const meResponse = await MeService.getApiV1Me();
-        props.userId = meResponse.id;
-        return ;
+        setUserId(meResponse.id)
+        return;
     }
 
     return (
@@ -61,15 +65,22 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
                 </Grid>
             </Grid>
 
+            {toastMessage && (
+                <SuccessLoginToast
+                    message={toastMessage}
+                    onClose={() => setToastMessage('')}
+                />
+            )}
+
 
             <Box sx={{width: '100%', marginRight: 12}}>
                 <Masonry
                     columns={{xs: 1, md: 2}}
                     spacing={2}
                 >
-                    {props.trips.filter(tr => tr.author.id === props.userId).map((tr, index) => (
+                    {props.trips.filter(tr => tr.author.id === props.userId || tr.author.id === userId).map((tr, index) => (
                         <div key={index}>
-                            <MyTrip tripData={tr} />
+                            <MyTrip tripData={tr}/>
                         </div>
                     ))}
                 </Masonry>
@@ -78,7 +89,11 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
             {newTripOpen &&
                 <NewTripModal
                     isOpen={newTripOpen}
-                    close={() => setNewTripOpen(false)}
+                    close={() => {
+                        setNewTripOpen(false)
+                        setToastMessage("Новая поездка успешно добавлена!")
+                    }}
+                    onNewTrip={props.onNewTrip}
                 />}
         </Box>
     );

@@ -87,7 +87,7 @@ const Trip: FC<TripProps> = (props) => {
                 <Box sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mb: 0.5}}>
                     <LocationOn sx={{color: 'primary.main', mr: 0.6, fontSize: 20, ml: -0.4}}/>
                     <Typography variant="h6" sx={{fontWeight: 'bold', lineHeight: 1, mt: 0.3, textAlign: "left"}}>
-                        {'Площадь восстания'} {} → {'ИТМО на Кронверском'}
+                        {props.tripData.firstAddr} {} → {props.tripData.lastAddr}
                     </Typography>
                 </Box>
 

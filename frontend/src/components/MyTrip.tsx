@@ -82,13 +82,13 @@ const MyTrip: FC<TripProps> = (props) => {
         >
 
             {/* Трип */}
-            <CardContent sx={{flexGrow: 1, p: 2, pb: 0, mb: 0}}>
+            <CardContent sx={{flexGrow: 1, p: 2, pb: 0, mb: 3}}>
                 {/* Заголовок маршрута */}
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5}}>
                     <Box sx={{display: 'flex', alignItems: 'flex-start', ml: -0.3}}>
                         <LocationOn sx={{color: 'primary.main', mr: 0.6, fontSize: 20}}/>
                         <Typography variant="h6" sx={{fontWeight: 'bold', lineHeight: 1, mt: 0.3, textAlign: "left"}}>
-                            {'Площадь восстания'} → {'ИТМО на Кронверском'}
+                            {props.tripData.firstAddr} {} → {props.tripData.lastAddr}
                         </Typography>
                     </Box>
                     <Grid style={{marginRight: -6}}>
@@ -173,6 +173,7 @@ const MyTrip: FC<TripProps> = (props) => {
                             textAlign: 'left',
                             mx: 0,
                             alignSelf: 'flex-start',
+                            mb: -1,
                             '&::before': {
                                 content: '""',
                                 position: 'absolute',

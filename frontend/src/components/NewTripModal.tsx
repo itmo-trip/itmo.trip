@@ -23,6 +23,7 @@ import Utils from "../services/Utils.ts";
 interface NewTripProps {
     isOpen: boolean;
     close: any;
+    onNewTrip: () => Promise<void>;
 }
 
 interface NewTripState {
@@ -54,14 +55,14 @@ const steps = ["Отправление", "Прибытие", "Дополните
 
 const NewTripModal: FC<NewTripProps> = (props) => {
     const [newTripState, setNewTripState] = useState<NewTripState>({
-        arrival_time: undefined,
+        arrival_time: new Date(),
         departure_time: new Date(),
         transport_type_id: undefined,
         comment: "",
     })
 
     const [activeStep, setActiveStep] = useState(0);
-    const [errors, setErrors] = useState<string[]>();
+    const [_, setErrors] = useState<string[]>();
 
     const [transportTypes, setTransportTypes] = useState<TransportType[]>();
     const [locationTypes, setLocationTypes] = useState<LocationType[]>();
@@ -142,6 +143,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
             }
 
             await TripsService.postApiV1Trips(tripRequest)
+            props.onNewTrip()
             clearModal()
             props.close()
         } catch (e) {
@@ -167,9 +169,6 @@ const NewTripModal: FC<NewTripProps> = (props) => {
                     Новая поездка
                 </DialogTitle>
                 <DialogContent>
-                    {errors && (
-                        <p style={{color: "red", marginBottom: "0"}}>{errors}</p>
-                    )}
                     <Stepper activeStep={activeStep} alternativeLabel sx={{mb: 3}}>
                         {steps.map((label) => (
                             <Step key={label}>
@@ -246,7 +245,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
                                     label="Время прибытия"
                                     type="datetime-local"
                                     variant='standard'
-                                    value={DateTimeUtils.toISOString(newTripState.departure_time) ?? ''}
+                                    value={DateTimeUtils.toISOString(newTripState.arrival_time) ?? ''}
                                     onChange={(e) => {
                                         setNewTripState(prevState => ({
                                             ...prevState,

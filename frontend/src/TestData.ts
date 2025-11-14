@@ -61,43 +61,53 @@ export const trips: ITrip[] = [
         arrival_time: new Date('2025-11-25T15:30:00Z'),
         transport_type: 'Общественный транспорт',
         trip_frequency: 'Каждую неделю',
-        comment: 'Быстрее всего на метро, согласны?'
+        comment: 'Быстрее всего на метро, согласны?',
+        firstAddr: 'Площадь Восстания',
+        lastAddr: 'ИТМО на Кронверском'
     },
     {
         author: authors[1],
-        departure_coords: [59.92768158712746,30.36048332235471],
-        arrival_coords: [59.95718670847085,30.308284464092527],
+        departure_coords: [59.9369, 30.4801],
+        arrival_coords: [59.94403, 30.2952],
         arrival_time: new Date('2025-11-25T20:30:00Z'),
         transport_type: 'Такси',
         trip_frequency: 'Разовая',
-        comment: ''
+        comment: '',
+        firstAddr: 'Метро Проспект Большевиков',
+        lastAddr: 'ИТМО на Биржевой'
     },
     {
         author: authors[2],
-        departure_coords: [59.92768158712746,30.36048332235471],
-        arrival_coords: [59.95718670847085,30.308284464092527],
+        departure_coords: [59.936562064167354,30.499978000000002],
+        arrival_coords: [59.92351402504148,30.376095926709972],
         arrival_time: new Date('2025-11-20T15:30:00Z'),
         transport_type: 'Общественный транспорт',
         trip_frequency: 'Каждую неделю',
-        comment: 'Люблю автобусы'
+        comment: 'Люблю автобусы',
+        firstAddr: 'Общежитие на Белорусской',
+        lastAddr: 'Миргородская 3'
     },
     {
         author: authors[3],
-        departure_coords: [59.92768158712746,30.36048332235471],
-        arrival_coords: [59.95718670847085,30.308284464092527],
+        departure_coords: [59.984031419684804,30.35699900879305],
+        arrival_coords: [59.92646000495477,30.339519547126066],
         arrival_time: new Date('2025-11-20T20:30:00Z'),
         transport_type: 'Своя машина',
         trip_frequency: 'Каждую неделю',
-        comment: 'Готов подвезти'
+        comment: 'Готов подвезти',
+        firstAddr: 'Станция метро Лесная',
+        lastAddr: 'ИТМО на Ломоносова'
     },
     {
         author: authors[4],
-        departure_coords: [59.92768158712746,30.36048332235471],
-        arrival_coords: [59.95718670847085,30.308284464092527],
+        departure_coords: [59.98401017798144,30.35052918892963],
+        arrival_coords: [59.92655346472663,30.33910851753994],
         arrival_time: new Date('2025-11-20T12:00:00Z'),
         transport_type: 'Общественный транспорт',
         trip_frequency: 'Каждую неделю',
-        comment: ''
+        comment: '',
+        firstAddr: 'Станция метро Лесная',
+        lastAddr: 'ИТМО на Ломоносова'
     },
     {
         author: authors[2],
@@ -106,6 +116,8 @@ export const trips: ITrip[] = [
         arrival_time: new Date('2025-11-20T12:00:00Z'),
         transport_type: 'Каршеринг',
         trip_frequency: 'Каждую неделю',
-        comment: ''
+        comment: '',
+        firstAddr: 'Станция метро Лесная',
+        lastAddr: 'ИТМО на Ломоносова'
     },
 ];

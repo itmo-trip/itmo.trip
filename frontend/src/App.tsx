@@ -146,7 +146,7 @@ function App() {
                                 <MyTripsTape
                                     trips={globalTrips}
                                     userId={userId}
-                                    onNewTrip={async () => await getTrips()}
+                                    onUpdateTrip={async () => await getTrips()}
                                 />}
                             />
                         </Routes>

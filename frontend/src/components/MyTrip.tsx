@@ -11,6 +11,7 @@ import {TripMap} from "./TripMap.tsx";
 import type {ITrip} from "../models/ITrip.ts";
 import type {FC} from "react";
 import IconButton from "@mui/material/IconButton";
+import {TripsService} from "../api/generated";
 
 const StyledCard = styled(Card)(({theme}) => ({
     display: 'flex',
@@ -46,6 +47,7 @@ const formatTime = (date: Date) => {
 
 interface TripProps {
     tripData: ITrip
+    onDeleteTrip: () => Promise<void>;
 }
 
 const MyTrip: FC<TripProps> = (props) => {
@@ -61,6 +63,10 @@ const MyTrip: FC<TripProps> = (props) => {
         setFocusedCardIndex(null);
     };
 
+    const func = async () => {
+        await TripsService.deleteApiV1Trips(props.tripData.id)
+        props.onDeleteTrip()
+    }
 
     return (
         <StyledCard
@@ -106,7 +112,9 @@ const MyTrip: FC<TripProps> = (props) => {
                                 }
                             }}
                         >
-                            <DeleteOutline fontSize="medium" sx={{fontSize: 18}}/>
+                            <DeleteOutline fontSize="medium" sx={{fontSize: 18}} onClick={() => {
+                                func()
+                            }}/>
                         </IconButton>
                     </Grid>
                 </Box>

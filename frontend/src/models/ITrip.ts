@@ -1,6 +1,7 @@
 import type { IAuthor } from "./IAuhor.ts";
 
 export interface ITrip {
+    id: string,
     author: IAuthor,
     departure_coords: [number, number],
     arrival_coords: [number, number],

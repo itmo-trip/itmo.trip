@@ -14,7 +14,7 @@ import type {IAuthor} from "../models/IAuhor.ts";
 interface MyTripsTapeProps {
     trips: ITrip[]
     userId: string
-    onNewTrip: () => Promise<void>;
+    onUpdateTrip: () => Promise<void>;
 }
 
 export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
@@ -56,8 +56,10 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, width: '100%'}}>
-            <Grid container spacing={2} justifyContent="space-between" marginRight={2}>
-                <Grid size={{md: 6, xs: 12}} sx={{order: {xs: 2, md: 1}}}>
+            <Grid container spacing={2} justifyContent="space-between" marginRight={2}
+                  sx={{ width: '100%' }}
+            >
+                <Grid size={{md: 6, xs: 12}} sx={{order: {xs: 2, md: 1, width: '100%'}}} >
                     <Button
                         variant="outlined"
                         onClick={() => setNewTripOpen(true)}
@@ -71,7 +73,7 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
                         Создать поездку
                     </Button>
                 </Grid>
-                {author && <Grid size={{md: 6, xs: 12}} sx={{order: {xs: 1, md: 2}}}>
+                {author && <Grid size={{md: 6, xs: 12}} sx={{order: {xs: 1, md: 2}, width: '100%'}}>
                     <UserInfo author={author}/>
                 </Grid>}
             </Grid>
@@ -85,7 +87,7 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
                 >
                     {props.trips.filter(tr => tr.author.id === props.userId || tr.author.id === userId).map((tr, index) => (
                         <div key={index}>
-                            <MyTrip tripData={tr}/>
+                            <MyTrip tripData={tr} onDeleteTrip={props.onUpdateTrip}/>
                         </div>
                     ))}
                 </Masonry>
@@ -98,7 +100,7 @@ export const MyTripsTape: React.FC<MyTripsTapeProps> = (props) => {
                         setNewTripOpen(false)
                         setToastMessage("Новая поездка успешно добавлена!")
                     }}
-                    onNewTrip={props.onNewTrip}
+                    onNewTrip={props.onUpdateTrip}
                 />}
         </Box>
     );

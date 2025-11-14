@@ -13,7 +13,7 @@ export default class Utils {
 
     static mapUserToAuthor = (u: UserResponse): IAuthor => ({
         id: u.id,
-        name: `${u.last_name} ${u.first_name}${u.middle_name ? ' ' + u.middle_name : ''}`,
+        name: `${u.first_name}`,
         avatar: u.avatar_url ?? '',
         courseNumber: 1,  // Пока на бэкенде в БД не добавили это поле
         facultyName: u.faculty,
@@ -22,6 +22,7 @@ export default class Utils {
     });
 
     static mapTripResponseToITrip = (t: TripResponse): ITrip => ({
+        id: t.id,
         arrival_coords: [
             t.arrival_location.latitude,
             t.arrival_location.longitude
@@ -38,4 +39,13 @@ export default class Utils {
         firstAddr: t.departure_location.name,
         lastAddr: t.arrival_location.name
     });
+
+    static openUserTelegramReference = (tgName: string) => {
+        const username = tgName?.replace('@', '');
+        if (username) {
+            window.open(`https://t.me/${username}`, "_blank", "noopener,noreferrer");
+        }
+    }
 }
+
+

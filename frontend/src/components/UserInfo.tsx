@@ -20,7 +20,8 @@ export const UserInfo: FC<TripAuthorProps> = (props) => {
                 backgroundColor: 'background.default',
                 boxSizing: 'border-box',
                 display: 'flex',
-                borderRadius: 2
+                borderRadius: 2,
+                minWidth: '400px'
             }}
         >
             <Box sx={{
@@ -28,7 +29,7 @@ export const UserInfo: FC<TripAuthorProps> = (props) => {
                 alignItems: 'start',
                 justifyContent: 'space-between',
                 gap: 2,
-                width: '100%'
+                width: '100%',
             }}>
                 <Box sx={{display: 'flex', alignItems: 'space-between', gap: 2}}>
                     <Avatar
@@ -68,6 +69,7 @@ export const UserInfo: FC<TripAuthorProps> = (props) => {
                                         clickable
                                         color="primary"
                                         style={{color: '#2e7d32'}}
+                                        onClick={() => Utils.openUserTelegramReference(props.author.tg_username)}
                                     />
                                 )}
                             </Box>

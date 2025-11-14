@@ -136,16 +136,17 @@ export function AuthForm({ onSuccess, onProfileComplete }: AuthFormProps) {
             ) : (
                 <>
                     <Typography variant="h6" align="center">
-                        Дополните профиль
+                        Пожалуйста, заполните информацию о себе
                     </Typography>
                     <TextField
-                        label="Биография"
+                        label="Био"
                         fullWidth
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
                     />
                     <TextField
-                        label="Имя пользователя в соцсетях"
+                        label="Имя в telegram"
+                        required
                         fullWidth
                         value={socialUsername}
                         onChange={(e) => setSocialUsername(e.target.value)}

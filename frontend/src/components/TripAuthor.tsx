@@ -3,6 +3,7 @@ import {type FC} from "react";
 import {Avatar, Box, Chip} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import Utils from "../services/Utils.ts";
 
 interface TripAuthorProps {
     author: IAuthor
@@ -66,6 +67,7 @@ export const TripAuthor: FC<TripAuthorProps> = (props) => {
                                             clickable
                                             color="primary"
                                             style={{color: '#2e7d32'}}
+                                            onClick={() => Utils.openUserTelegramReference(props.author.tg_username)}
                                         />
                                     )}
                                 </Box>

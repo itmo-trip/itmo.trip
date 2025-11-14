@@ -25,12 +25,6 @@ java {
     }
 }
 
-idea {
-    module {
-        generatedSourceDirs.add(file("$rootDir/frontend/src/generated"))
-    }
-}
-
 sourceSets {
     main {
         kotlin {

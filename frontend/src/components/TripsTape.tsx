@@ -57,7 +57,6 @@ export default function TripsTape() {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <Filter />
             <Box sx={{ width: "100%" }}>
                 <Masonry columns={{ xs: 1, md: 2 }} spacing={2}>
                     {trips.map((tr, index) => (

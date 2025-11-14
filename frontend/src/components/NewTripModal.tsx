@@ -61,7 +61,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
     })
 
     const [activeStep, setActiveStep] = useState(0);
-    const [errors, setErrors] = useState<string[]>();
+    const [_, setErrors] = useState<string[]>();
 
     const [transportTypes, setTransportTypes] = useState<TransportType[]>();
     const [locationTypes, setLocationTypes] = useState<LocationType[]>();
@@ -167,9 +167,6 @@ const NewTripModal: FC<NewTripProps> = (props) => {
                     Новая поездка
                 </DialogTitle>
                 <DialogContent>
-                    {errors && (
-                        <p style={{color: "red", marginBottom: "0"}}>{errors}</p>
-                    )}
                     <Stepper activeStep={activeStep} alternativeLabel sx={{mb: 3}}>
                         {steps.map((label) => (
                             <Step key={label}>

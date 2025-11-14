@@ -7,5 +7,7 @@ export interface ITrip {
     arrival_time: Date,
     transport_type: string,
     trip_frequency: string,
-    comment: string
+    comment: string,
+    firstAddr: string,
+    lastAddr: string,
 }

@@ -50,20 +50,11 @@ export default function MyTripsTape() {
                     columns={{xs: 1, md: 2}}
                     spacing={2}
                 >
-                    <div key={0}>
-                        <MyTrip tripData={trips[0]}/>
-                    </div>
-                    <div key={1}>
-                        <MyTrip tripData={trips[0]}/>
-                    </div>
-                    <div key={2}>
-                        <MyTrip tripData={trips[0]}/>
-                    </div>
-                    {/*{trips.map((tr, index) => (*/}
-                    {/*    <div key={index}>*/}
-                    {/*        <Trip tripData={tr} />*/}
-                    {/*    </div>*/}
-                    {/*))}*/}
+                    {trips.map((tr, index) => (
+                        <div key={index}>
+                            <MyTrip tripData={tr} />
+                        </div>
+                    ))}
                 </Masonry>
             </Box>
 

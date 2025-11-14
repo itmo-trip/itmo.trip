@@ -105,7 +105,7 @@ export function AuthForm({ onSuccess, onProfileComplete }: AuthFormProps) {
             {step === "login" ? (
                 <>
                     <Typography variant="h5" align="center">
-                        ITMO.TRIP ID
+                        ITMO ID
                     </Typography>
 
                     <TextField

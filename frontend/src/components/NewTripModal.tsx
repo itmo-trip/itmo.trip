@@ -1,4 +1,4 @@
-import {useState, type FC, type FormEvent, useEffect} from "react";
+import {useState, type FC, useEffect} from "react";
 import {
     LocationsService,
     LocationTypesService,
@@ -109,13 +109,12 @@ const NewTripModal: FC<NewTripProps> = (props) => {
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
     const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async () => {
         if (!newTripState.transport_type_id || !departurePoint.type_id || !arrivalPoint.type_id) {
             setErrors(['Пожалуйста, заполните все необходимые поля'])
             return
         }
 
-        e.preventDefault()
         try {
             const departureLocationResponse = await LocationsService.postApiV1Locations({
                 latitude: departurePoint.latitude!,
@@ -144,7 +143,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
 
             await TripsService.postApiV1Trips(tripRequest)
             clearModal()
-            props.close
+            props.close()
         } catch (e) {
             setErrors(['Ошибка создания новой поездки'])
         }
@@ -158,6 +157,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
             comment: "",
         });
 
+    // @ts-ignore
     return (
         <div>
             <Dialog fullWidth
@@ -167,6 +167,9 @@ const NewTripModal: FC<NewTripProps> = (props) => {
                     Новая поездка
                 </DialogTitle>
                 <DialogContent>
+                    {errors && (
+                        <p style={{color: "red", marginBottom: "0"}}>{errors}</p>
+                    )}
                     <Stepper activeStep={activeStep} alternativeLabel sx={{mb: 3}}>
                         {steps.map((label) => (
                             <Step key={label}>
@@ -361,7 +364,7 @@ const NewTripModal: FC<NewTripProps> = (props) => {
                         Назад
                     </Button>
                     {activeStep === steps.length - 1 ? (
-                        <Button variant="outlined" color="primary" onClick={handleSubmit}>
+                        <Button variant="outlined" color="primary" onClick={() => handleSubmit()}>
                             Создать
                         </Button>
                     ) : (

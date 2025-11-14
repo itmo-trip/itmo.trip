@@ -1,28 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import {CircularProgress, InputAdornment, TextField, Typography} from "@mui/material";
 import Map, {Marker} from "react-map-gl/maplibre";
 import RoomIcon from "@mui/icons-material/Room";
-
-const mapStyle = {
-    version: 8,
-    sources: {
-        "osm-tiles": {
-            type: "raster",
-            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-            tileSize: 256,
-        },
-    },
-    layers: [
-        {
-            id: "osm-tiles-layer",
-            type: "raster",
-            source: "osm-tiles",
-            minzoom: 0,
-            maxzoom: 19,
-        },
-    ],
-} as any;
-
 interface LocationFieldProps {
     value: string;
     coords: [number, number] | null;

@@ -3,7 +3,7 @@ import {API_BASE} from "./OpenAPI.custom.ts";
 
 export async function login(username: string, password: string): Promise<boolean> {
     try {
-        const res = await fetch(`${API_BASE}/auth/login`, {
+        const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
@@ -34,7 +34,7 @@ export async function refreshTokens(): Promise<boolean> {
     if (!refreshToken) return false;
 
     try {
-        const res = await fetch(`${API_BASE}/auth/refresh`, {
+        const res = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refreshToken }),
@@ -92,7 +92,7 @@ export async function apiFetch(
 }
 
 export async function getUserProfile() {
-    const res = await apiFetch("/me");
+    const res = await apiFetch("/api/v1/me");
     if (!res.ok) throw new Error("Не удалось получить профиль");
     return res.json();
 }

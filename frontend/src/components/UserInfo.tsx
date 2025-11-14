@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import Utils from "../services/Utils.ts";
 
 interface TripAuthorProps {
     author: IAuthor;

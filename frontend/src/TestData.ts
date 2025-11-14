@@ -3,7 +3,7 @@ import type {ITrip} from "./models/ITrip.ts";
 
 export const authors: IAuthor[] = [
     {
-        id: 1,
+        id: "1",
         name: 'Артем',
         avatar: 'https://photo.itmo.su/avatar/5a27f96a77c1de323cbc869796d80858966122f9/',
         courseNumber: 1,
@@ -12,7 +12,7 @@ export const authors: IAuthor[] = [
         bio: 'Много разных увлечений, увлечений, увлечений'
     },
     {
-        id: 2,
+        id: "2",
         name: 'Юрий',
         avatar: 'https://avatars.githubusercontent.com/u/91129832?s=400&u=30b6fbc90706b89e125de0f35e6d0bbce0d4f973&v=4',
         courseNumber: 1,
@@ -21,7 +21,7 @@ export const authors: IAuthor[] = [
         bio: 'Разработка, разработка, разработка, разработка'
     },
     {
-        id: 3,
+        id: "3",
         name: 'Олег',
         avatar: 'https://avatars.githubusercontent.com/u/78702860?v=4',
         courseNumber: 1,
@@ -32,7 +32,7 @@ export const authors: IAuthor[] = [
             ' Все бы хорошо, но есть проблемы. '
     },
     {
-        id: 4,
+        id: "4",
         name: 'Тимур',
         avatar: 'https://avatars.githubusercontent.com/u/89847233?v=4',
         courseNumber: 1,
@@ -41,7 +41,7 @@ export const authors: IAuthor[] = [
         bio: ''
     },
     {
-        id: 5,
+        id: "5",
         name: 'Артем',
         avatar: '',
         courseNumber: 1,

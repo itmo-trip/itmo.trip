@@ -66,7 +66,7 @@ export function AuthForm({ onSuccess, onProfileComplete }: AuthFormProps) {
 
         try {
             // PATCH user with BIO and SOCIAL_NETWORK_USER_NAME
-            const res = await fetch(`${API_BASE}/users/${userUuid}`, {
+            const res = await fetch(`${API_BASE}/api/v1/users/${userUuid}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
